@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<modification>
+  <name>ArquivoOBNGRU</name>
+  <id>ArquivoOBNGRU</id>
+  <ecidade-version>2.3.39</ecidade-version>
+  
+  <file path='model/caixa/arquivos/PagamentoFornecedorBancoDoBrasilOBN.model.php'>
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 1 */]]></search>
+      <add position="after">
+        <![CDATA[
+          $oRegistro->codigo_movimento = trim((int) $oArquivo->codob);
+
+          $oRegistro->codigo_barras        = $oArquivo->codigobarra;]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 2 */]]></search>
+      <add position="after">
+        <![CDATA[
+          $oRegistro->codigo_movimento = trim((int) $oArquivo->codigo_ob);
+
+          $oRegistro->codigo_receita       = $oArquivo->cod_rec_tributo;]]>
+      </add>
+    </operation>
+
+  </file>  
+
+  <file path='model/caixa/arquivos/ProcessamentoPagamentoFornecedor.model.php'>
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 1 */]]></search>
+      <add position="after">
+        <![CDATA[
+    $aRetornosPagamento = array();
+    ]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 2 */
+      $oRegistro->codigo_movimento = (int)$oRegistro->codigo_movimento;
+      $aMovimentosArquivo[]        = $oRegistro->codigo_movimento;]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte 2 */
+      if (isset($oRegistro->numero_autenticacao) && !empty($oRegistro->numero_autenticacao)){
+        
+        $oAutent = new stdClass();
+        $oAutent->empagemov           = (int)$oRegistro->codigo_movimento;
+        $oAutent->codigo_receita      = $oRegistro->codigo_receita;
+        $oAutent->codigo_barras       = $oRegistro->codigo_barras;
+        $oAutent->numero_autenticacao = $oRegistro->numero_autenticacao;
+        $aRetornosPagamento[] = $oAutent;
+      } else {
+        
+        $oRegistro->codigo_movimento = (int)$oRegistro->codigo_movimento;
+        $aMovimentosArquivo[]        = $oRegistro->codigo_movimento;
+      }]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 3 */]]></search>
+      <add position="after">
+        <![CDATA[
+    foreach ($aRetornosPagamento as $oRetornoPagamento) {
+      
+      if(!empty($oRetornoPagamento->codigo_barras)) {
+
+        $oDaoEmpAgeMovDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
+        $sSqlDetalheTransmissao = $oDaoEmpAgeMovDetalheTransmissao->sql_query_file(null, "*", null, "e74_empagemov = {$oRetornoPagamento->empagemov} and e74_codigodebarra = '{$oRetornoPagamento->codigo_barras}'");
+        $rsDetalheTransmissao   = $oDaoEmpAgeMovDetalheTransmissao->sql_record($sSqlDetalheTransmissao);
+        $iDetalheTransmissao    = db_utils::fieldsMemory($rsDetalheTransmissao, 0)->e74_sequencial;
+
+        $oDaoEmpAgeMovDetalheTransmissaoAutenticacao = db_utils::getDao('empagemovdetalhetransmissaoautenticacao');
+        $oDaoEmpAgeMovDetalheTransmissaoAutenticacao->empagemovdetalhetransmissao = $iDetalheTransmissao;
+        $oDaoEmpAgeMovDetalheTransmissaoAutenticacao->numautenticacao             = $oRetornoPagamento->numero_autenticacao;
+        $oDaoEmpAgeMovDetalheTransmissaoAutenticacao->incluir(null);
+        
+        if ($oDaoEmpAgeMovDetalheTransmissaoAutenticacao->erro_status == "0") {
+          throw new BusinessException("[Erro] Não foi possível salvar a autenticação do movimento {$iCodigoMovimentoNaoRetornado}.");
+        }
+
+      } elseif (!empty($oRetornoPagamento->codigo_receita)) {
+        
+        $oDaoEmpAgeMovPagamento = db_utils::getDao('empagemovpagamento');
+        $sSqlEmpAgeMovPagamento = $oDaoEmpAgeMovPagamento->sql_query_empagemov("empagemovpagamento.*", "", "empagemov = {$oRetornoPagamento->empagemov} and codreceita = {$oRetornoPagamento->codigo_receita}");
+        $rsEmpAgeMovPagamento   = $oDaoEmpAgeMovPagamento->sql_record($sSqlEmpAgeMovPagamento);
+        $iEmpAgeMovPagamento    = db_utils::fieldsMemory($rsEmpAgeMovPagamento, 0)->sequencial;
+
+        $oDaoEmpAgeMovPagamentoAutenticacao = db_utils::getDao('empagemovpagamentoautenticacao');
+        $oDaoEmpAgeMovPagamentoAutenticacao->empagemovpagamento = $iEmpAgeMovPagamento;
+        $oDaoEmpAgeMovPagamentoAutenticacao->numautenticacao    = $oRetornoPagamento->numero_autenticacao;
+        $oDaoEmpAgeMovPagamentoAutenticacao->incluir(null);
+
+        if ($oDaoEmpAgeMovPagamentoAutenticacao->erro_status == "0") {
+          throw new BusinessException("[Erro] Não foi possível salvar a autenticação do movimento {$iCodigoMovimentoNaoRetornado}.");
+        }
+      
+      }
+
+    }]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 4 */]]></search>
+      <add position="after">
+        <![CDATA[
+      /*
+       * Verifica se o movimento possui cód. de barras (linha tipo 4) ou cód. de receita (linha tipo 5)
+       * Se tiver, não cria retorno, pois a linha tipo 2 que o precede já tem um retorno 
+       */
+      if (isset($oMovimentoRetorno->codigo_barras) || isset($oMovimentoRetorno->codigo_receita)) {
+        continue;
+      }]]>
+      </add>
+    </operation>
+
+  </file>
+  
+  <file path='model/caixa/ConfiguracaoArquivoObn.model.php'>
+    <operation>
+      <search><![CDATA[//Tipo de Layout Linha]]></search>
+      <add position="after">
+        <![CDATA[
+  const LAYOUT5      = 5;]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[// Movimentação com código de barras
+    $sCodigoBarras = $oDadosMovimentacao->getCodigoBarra();
+    if (!empty ($sCodigoBarras)) {]]></search>
+      <add position="replace">
+        <![CDATA[// Movimentação com código de barras
+    $sCodigoBarras  = $oDadosMovimentacao->getCodigoBarra();
+    $iCodigoReceita = $oDadosMovimentacao->getCodReceita();
+    
+    if (!empty ($sCodigoBarras) || !empty($iCodigoReceita)) {]]>
+      </add>
+    </operation>
+
+  </file>
+  
+  <file path='model/caixa/GeradorArquivoObn.model.php'>
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte1 */
+          $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento);
+          $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 4);
+          
+          $this->iContadorRegistros++;]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte1 */
+          $oDaoDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
+          $sSqlDetalheTransmissao = $oDaoDetalheTransmissao->sql_query_file (null, "*", null, "e74_empagemov = {$oDadosMovimento->getCodigoMovimento()}");
+          $rsDetalheTransmissao   = $oDaoDetalheTransmissao->sql_record($sSqlDetalheTransmissao);
+          
+          if ($oDaoDetalheTransmissao->numrows > 0) {
+
+            for ($iDetalheTransmissao=0; $iDetalheTransmissao < $oDaoDetalheTransmissao->numrows; $iDetalheTransmissao++) { 
+              
+              $oDadosDetalheTransmissao = db_utils::fieldsMemory($rsDetalheTransmissao, $iDetalheTransmissao);
+              
+              $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento, $oDadosDetalheTransmissao);
+              $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 4);
+              
+              $this->iContadorRegistros++;
+            }
+
+          }]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte2 */]]></search>
+      <add position="after">
+        <![CDATA[
+      case ConfiguracaoArquivoObn::LAYOUT5:
+
+          $oLinha          = $this->constroiLinhaTipoDois($oDadosMovimento);
+          $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 2);
+        
+          $this->iSequencialRegistro++;
+
+          $oDaoEmpAgeMovPagamento = db_utils::getDao('empagemovpagamento');
+          $sSqlEmpAgeMovPagamento = $oDaoEmpAgeMovPagamento->sql_query_empagemov("*", "", "empagemov = {$oDadosMovimento->getCodigoMovimento()}");
+          $rsEmpAgeMovPagamento   = $oDaoEmpAgeMovPagamento->sql_record($sSqlEmpAgeMovPagamento);
+
+          if ($oDaoEmpAgeMovPagamento->numrows > 0) {
+
+            for ($iPagamento = 0; $iPagamento < $oDaoEmpAgeMovPagamento->numrows; $iPagamento++) { 
+              
+              $oDadosPagamento = db_utils::fieldsMemory($rsEmpAgeMovPagamento, $iPagamento);
+
+              $oLinha = $this->constroiLinhaTipoCinco($oDadosMovimento, $oDadosPagamento);
+              $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 5);
+              
+              $this->iContadorRegistros++;
+            }
+
+          }
+          
+          $aCodigoSequenciais[] = $this->iContadorRegistros;
+      break;]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte3 */
+  private function constroiLinhaTipoQuatro(MovimentoArquivoTransmissao $oDadosLinha) {]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte3 */
+  private function constroiLinhaTipoQuatro(MovimentoArquivoTransmissao $oDadosLinha, $oDadosDetalheTransmissao) {]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte4 */
+    list($iAnoCodigoBarra, $iMesCodigoBarra, $iDiaCodigoBarra) = explode("-", $oDadosLinha->getDataVencimento());]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte4 */
+    list($iAnoCodigoBarra, $iMesCodigoBarra, $iDiaCodigoBarra) = explode("-", $oDadosDetalheTransmissao->e74_datavencimento);]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte5 */
+    $oStdLinhaTipoQuatro->tipo_fatura                      = $oDadosLinha->getTipoFatura();
+    $oStdLinhaTipoQuatro->codigo_barra                     = $oDadosLinha->getCodigoBarra();]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte5 */
+    $oStdLinhaTipoQuatro->tipo_fatura                      = $oDadosDetalheTransmissao->e74_tipofatura;
+    $oStdLinhaTipoQuatro->codigo_barra                     = $oDadosDetalheTransmissao->e74_codigodebarra;]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte6 */
+    $oStdLinhaTipoQuatro->cb_valor_nominal                 = str_pad(str_replace(".", "", $oDadosLinha->getValorNominal()), 17, "0", STR_PAD_LEFT);
+    $oStdLinhaTipoQuatro->cb_valor_desconto_abatimento     = str_pad(str_replace(".", "",  $oDadosLinha->getValorDesconto()), 17, "0", STR_PAD_LEFT);
+    $oStdLinhaTipoQuatro->cb_valor_mora_juros              = str_pad(str_replace(".", "", $oDadosLinha->getValorJuros()), 17, "0", STR_PAD_LEFT);]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte6 */
+    $oStdLinhaTipoQuatro->cb_valor_nominal                 = str_pad(str_replace(".", "", $oDadosDetalheTransmissao->e74_valornominal), 17, "0", STR_PAD_LEFT);
+    $oStdLinhaTipoQuatro->cb_valor_desconto_abatimento     = str_pad(str_replace(".", "",  $oDadosDetalheTransmissao->e74_valordesconto), 17, "0", STR_PAD_LEFT);
+    $oStdLinhaTipoQuatro->cb_valor_mora_juros              = str_pad(str_replace(".", "", $oDadosDetalheTransmissao->e74_valorjuros), 17, "0", STR_PAD_LEFT);]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte7 */
+    if ($oDadosLinha->getTipoFatura() == 2) {]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte7 */
+    if ($oDadosDetalheTransmissao->e74_tipofatura == 2) {]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte8 */]]></search>
+      <add position="after">
+        <![CDATA[
+  private function constroiLinhaTipoCinco(MovimentoArquivoTransmissao $oDadosLinha, $oDadosPagamento) {
+
+
+    $oStdLinhaTipoCinco       = new stdClass();
+    $iTipoFavorecido          = ConfiguracaoArquivoObn::verificaTipoFavorecido(strlen($oDadosLinha->getCnpj()));
+    $iTipoOperacao            = ConfiguracaoArquivoObn::verificarTipoOperacao($oDadosLinha);
+    list($iAno, $iMes, $iDia) = explode("-", $this->dtGeracaoArquivo);
+    list($iAnoPagamento, $iMesPagamento, $iDiaPagamento) = explode("-", $oDadosLinha->getDataVencimento());
+
+
+    $sCPFCNPJ = $oDadosLinha->getCnpj();
+    if ($iTipoFavorecido == ConfiguracaoArquivoObn::TIPO_CPF) {
+      $sCPFCNPJ = str_pad($sCPFCNPJ, 14, "0", STR_PAD_RIGHT);
+    }
+    $oStdLinhaTipoCinco->identificador_linha              = 5;
+    $sAgenciaInstituicao = $oDadosLinha->getCodigoAgenciaPagadora().$oDadosLinha->getDigitoVerificadorAgenciaPagadora();
+    $oStdLinhaTipoCinco->codigo_agencia_banco_instituicao = $sAgenciaInstituicao;
+
+    $sUgGestao          =  str_pad(str_pad($oDadosLinha->getOrgao(),2,"0",STR_PAD_LEFT).str_pad($oDadosLinha->getUnidade(),2,"0",STR_PAD_LEFT),"6","0",STR_PAD_LEFT).str_pad("1",5,"0",STR_PAD_LEFT);
+    if ($oDadosLinha->getContaPagadora() == "7000") {
+        $sUgGestao          =  "0".str_pad($oDadosLinha->getOrgao(),2,"0",STR_PAD_LEFT)."000".str_pad("1",5,"0",STR_PAD_LEFT);
+    }
+    $oStdLinhaTipoCinco->codigo_instituicao               = $sUgGestao;
+    $oStdLinhaTipoCinco->codigo_movimento                 = str_pad(number_format($oDadosLinha->getCodigoArquivoSistema(),0,',','.')."/".db_getsession("DB_anousu"), 11, "0", STR_PAD_LEFT);
+    
+    $oStdLinhaTipoCinco->codigo_ob                        = str_pad($oDadosLinha->getCodigoMovimento(), 11, "0", STR_PAD_LEFT);
+    $oStdLinhaTipoCinco->data_geracao_arquivo             = "{$iDia}{$iMes}{$iAno}";
+    $oStdLinhaTipoCinco->campo_branco_um                  = str_repeat(" ", 4);
+    $oStdLinhaTipoCinco->codigo_operacao                  = $iTipoOperacao;
+    $oStdLinhaTipoCinco->campo_branco_dois                = str_repeat(" ", 1);
+
+    $oStdLinhaTipoCinco->campo_zero_um                    = "000001";
+    
+    $oStdLinhaTipoCinco->campo_branco_tres                = str_repeat(" ", 3);
+    $oStdLinhaTipoCinco->valor_liquido                    = str_pad(str_replace(".", "", $oDadosLinha->getValor()), 17, "0", STR_PAD_LEFT);
+    $oStdLinhaTipoCinco->data_pagamento                   = "{$iDiaPagamento}{$iMesPagamento}{$iAnoPagamento}";
+    $oStdLinhaTipoCinco->campo_branco_quatro              = str_repeat(" ", 7);
+    
+    $oStdLinhaTipoCinco->tipo_pagamento                   = $oDadosPagamento->tipopagamento;
+    
+    $oStdLinhaTipoCinco->cod_rec_tributo       = str_pad($oDadosPagamento->codreceita, 6, " ", STR_PAD_LEFT);
+    $oStdLinhaTipoCinco->cod_ident_tributo     = str_pad($oDadosPagamento->codidentificacao, 2, " ", STR_PAD_LEFT);
+    ////DETALHAMENTO////
+
+    switch ($oDadosPagamento->tipopagamento) {
+      
+      //GPS
+      case '1':
+
+        //competencia
+        $oStdLinhaTipoCinco->detalhe_linha5  = str_pad(str_replace("/", "", $oDadosPagamento->mesanocompetencia), 6, "0", STR_PAD_LEFT);
+        //valor_INSS
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valorinss), 17, "0", STR_PAD_LEFT);
+        //valor_outras
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valoroutras), 17, "0", STR_PAD_LEFT);
+        //atualizacao_monetaria
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->atualizacaomonetaria), 17, "0", STR_PAD_LEFT);
+        //campo_branco_GPS
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_repeat(" ", 27);
+      break;
+      
+      //DARF
+      case '2':
+
+        //periodo_apuracao
+        $oStdLinhaTipoCinco->detalhe_linha5  = str_pad(str_replace("-", "", $oDadosPagamento->periodoapuracao), 8, "0", STR_PAD_LEFT);
+        //num_referencia
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->numreferencia), 17, "0", STR_PAD_LEFT);
+        //valor_principal
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valorprincipal), 17, "0", STR_PAD_LEFT);
+        //valor_multa
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valormulta), 17, "0", STR_PAD_LEFT);
+        //juros_encargos
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->jurosencargos), 17, "0", STR_PAD_LEFT);
+        //data_vencimento
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace("-", "", $oDadosPagamento->datavencimento), 8, "0", STR_PAD_LEFT);
+      break;
+
+      //DARF simples
+      case '3':
+
+        //periodo_apuracao
+        $oStdLinhaTipoCinco->detalhe_linha5  = str_pad(str_replace("-", "", $oDadosPagamento->periodoapuracao), 8, "0", STR_PAD_LEFT);
+        //valor_receita_bruta
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valorreceitabruta), 17, "0", STR_PAD_LEFT);
+        //percentual_receita
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->percentualreceita), 7, "0", STR_PAD_LEFT);
+        //valor_principal
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valorprincipal), 17, "0", STR_PAD_LEFT);
+        //valor_multa
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->valormulta), 17, "0", STR_PAD_LEFT);
+        //juros_encargos
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_pad(str_replace(".", "", $oDadosPagamento->jurosencargos), 17, "0", STR_PAD_LEFT);
+        //campo_branco_DARF_simples
+        $oStdLinhaTipoCinco->detalhe_linha5 .= str_repeat(" ", 1);
+      break;
+
+      default:
+        $oStdLinhaTipoCinco->detalhe_linha5  = "Erro ao gerar detalhamento da linha tipo 5. Verifique o vínculo com o empagemov.";
+      break;
+    }
+
+    ////FIM DETALHAMENTO////
+
+    $oStdLinhaTipoTres->tipo_favorecido      = $iTipoFavorecido;
+    $oStdLinhaTipoTres->codigo_favorecido    = $sCPFCNPJ;
+    $oStdLinhaTipoTres->nome_favorecido      = $oDadosLinha->getNome();
+    $oStdLinhaTipoCinco->campo_branco_cinco  = str_repeat(" ", 29);
+    $oStdLinhaTipoCinco->observacao_ob       = str_repeat(" ", 40);
+    $oStdLinhaTipoCinco->numero_autenticacao = str_repeat(" ", 16);
+
+    $sConvenioAgencia  = $oDadosLinha->getCodigoAgenciaPagadora().$oDadosLinha->getDigitoVerificadorAgenciaPagadora();
+    $oStdLinhaTipoCinco->convenio_agencia_dv              = $sConvenioAgencia;
+
+    $sConvenioConta    = $oDadosLinha->getContaPagadora().$oDadosLinha->getDigitoVerificadorContaPagadora();
+    $oStdLinhaTipoCinco->convenio_conta_dv                = str_pad($sConvenioConta, 10, " ", STR_PAD_RIGHT);
+    
+    $oStdLinhaTipoCinco->campo_branco_seis                = str_repeat(" ", 7);
+    $oStdLinhaTipoCinco->retorno_operacao                 = str_repeat("0", 2);
+    $oStdLinhaTipoCinco->numero_sequencial_movimento      = str_pad($this->iSequencialRegistro, 7, "0", STR_PAD_LEFT);
+    return $oStdLinhaTipoCinco;
+  }]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte9 */
+    $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(".", "", number_format($this->nValorTotalDasMovimentacoes, 2, ".", "")), 17, "0", STR_PAD_LEFT);]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte9 */
+    $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(".", "", number_format((float)$this->nValorTotalDasMovimentacoes, 2)), 17, "0", STR_PAD_LEFT);]]>
+      </add>
+    </operation>
+  </file>
+
+  
+  <file path='model/caixa/MovimentoArquivoTransmissao.model.php'>
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 1 */]]></search>
+      <add position="after">
+        <![CDATA[
+  /**
+   * Código do Tipo de Pagamento
+   * @var Integer
+   */
+  private $iTipoPagamento;
+  /**
+   * Código de Receita do Tributo
+   * @var Integer
+   */
+  private $iCodReceita;
+  /**
+   * Código de Identificação do Tributo
+   * @var Integer
+   */
+  private $iCodIdentificacao;
+  /**
+   * Período de Apuração
+   * @var Date
+   */
+  private $dPeriodoApuracao;
+  /**
+   * Data de Vencimento
+   * @var Date
+   */
+  private $dDataVencimento;
+  /**
+   * Mês e Ano de Competência
+   * @var String
+   */
+  private $sMesAnoCompetencia;
+  /**
+   * Número de Referência
+   * @var number
+   */
+  private $nNumReferencia;
+  /**
+   * Valor do INSS
+   * @var number
+   */
+  private $nValorINSS;
+  /**
+   * Valor de Outras Entidades
+   * @var number
+   */
+  private $nValorOutras;
+  /**
+   * Atualização Monetária
+   * @var number
+   */
+  private $nAtualizacaoMonetaria;
+  /**
+   * Valor da Receita Bruta
+   * @var number
+   */
+  private $nValorReceitaBruta;
+  /**
+   * Percentual da Receita
+   * @var number
+   */
+  private $nPercentualReceita;
+  /**
+   * Valor Principal
+   * @var number
+   */
+  private $nValorPrincipal;
+  /**
+   * Valor da Multa
+   * @var number
+   */
+  private $nValorMulta;
+  /**
+   * Valor de Juros e Encargos
+   * @var number
+   */
+  private $nJurosEncargos;
+
+]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 2 */]]></search>
+      <add position="after">
+        <![CDATA[
+  /**
+   * Orgao
+   * @var Integer
+   */
+  private $sOrgao;
+  
+  /**
+   * Unidade 
+   * @var Integer
+   */
+  private $iUnidade;  
+  
+  /**
+   * Codigo com ou sem fatura (f - Não, t - Sim)
+   * @var integer
+   */
+  private $iComFatura;
+        ]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 3 */]]></search>
+      <add position="after">
+        <![CDATA[  /**
+   * Slip Vinculo 
+   * @var integer
+   */
+  private $iSlipVinculo;
+
+  /**
+   * Data do Pagamento
+   * @var date
+   */
+  private $dtPagamento;
+
+
+  public function getTipoPagamento() {
+
+    return $this->iTipoPagamento;
+  }
+
+  public function setTipoPagamento($iTipoPagamento) {
+
+    $this->iTipoPagamento = $iTipoPagamento;
+  }
+
+  public function getCodReceita() {
+
+    return $this->iCodReceita;
+  }
+
+  public function setCodReceita($iCodReceita) {
+
+    $this->iCodReceita = $iCodReceita;
+  }
+
+  public function getCodIdentificacao() {
+
+    return $this->iCodIdentificacao;
+  }
+
+  public function setCodIdentificacao($iCodIdentificacao) {
+
+    $this->iCodIdentificacao = $iCodIdentificacao;
+  }
+
+  public function getPeriodoApuracao() {
+
+    return $this->dPeriodoApuracao;
+  }
+
+  public function setPeriodoApuracao($dPeriodoApuracao) {
+
+    $this->dPeriodoApuracao = $dPeriodoApuracao;
+  }
+
+  public function getMesAnoCompetencia() {
+    
+    return $this->sMesAnoCompetencia;
+  }
+
+  public function setMesAnoCompetencia($sMesAnoCompetencia) {
+
+    $this->sMesAnoCompetencia = $sMesAnoCompetencia;
+  }
+
+  public function getNumReferencia() {
+
+    return $this->nNumReferencia;
+  }
+
+  public function setNumReferencia($nNumReferencia) {
+
+    $this->nNumReferencia = $nNumReferencia;
+  }
+
+  public function getValorINSS() {
+    
+    return $this->nValorINSS;
+  }
+
+  public function setValorINSS($nValorINSS) {
+
+    $this->nValorINSS = $nValorINSS;
+  }
+
+  public function getValorOutras() {
+
+    return $this->nValorOutras;
+  }
+
+  public function setValorOutras($nValorOutras) {
+
+    $this->nValorOutras = $nValorOutras;
+  }
+
+  public function getAtualizacaoMonetaria() {
+
+    return $this->nAtualizacaoMonetaria;
+  }
+
+  public function setAtualizacaoMonetaria($nAtualizacaoMonetaria) {
+
+    $this->nAtualizacaoMonetaria = $nAtualizacaoMonetaria;
+  }
+
+  public function getValorReceitaBruta() {
+
+    return $this->nValorReceitaBruta;
+  }
+
+  public function setValorReceitaBruta($nValorReceitaBruta) {
+
+    $this->nValorReceitaBruta = $nValorReceitaBruta;
+  }
+
+  public function getPercentualReceita() {
+
+    return $this->nPercentualReceita;
+  }
+
+  public function setPercentualReceita($nPercentualReceita) {
+
+    $this->nPercentualReceita = $nPercentualReceita;
+  }
+
+  public function getValorPrincipal() {
+
+    return $this->nValorPrincipal;
+  }
+
+  public function setValorPrincipal($nValorPrincipal) {
+
+    $this->nValorPrincipal = $nValorPrincipal;
+  }
+
+  public function getValorMulta() {
+
+    return $this->nValorMulta;
+  }
+
+  public function setValorMulta($nValorMulta) {
+
+    $this->nValorMulta = $nValorMulta;
+  }
+
+  public function getJurosEncargos() {
+
+    return $this->nJurosEncargos;
+  }
+
+  public function setJurosEncargos($nJurosEncargos) {
+
+    $this->nJurosEncargos = $nJurosEncargos;
+  }
+
+
+  public function getOrgao() {
+      return $this->sOrgao;
+  }
+
+  public function setOrgao($sOrgao) {
+      $this->sOrgao = $sOrgao;
+  }
+
+  public function getUnidade() {
+      return $this->iUnidade;
+  }
+
+  public function setUnidade($iUnidade) {
+      $this->iUnidade = $iUnidade;
+  }
+
+  public function getComFatura() {
+    return $this->iComFatura;
+  }
+
+  public function setComFatura($iComFatura) {
+    $this->iComFatura = $iComFatura;
+  }
+
+  public function setSlipVinculo($iSlipVinculo) {
+    $this->iSlipVinculo = $iSlipVinculo;
+  }
+
+  public function getSlipVinculo() {
+    return $this->iSlipVinculo;
+  }
+        ]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 4 */]]></search>
+      <add position="after">
+        <![CDATA[
+  /**
+   * @return date
+   */
+  public function getDtPagamento() {
+    return $this->dtPagamento;
+  }
+  
+  /**
+   * @param date $dtPagamento
+   * @return self
+   */
+  public function setDtPagamento($dtPagamento) {
+
+    $this->dtPagamento = $dtPagamento;
+    return $this;
+  }]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 5 */]]></search>
+      <add position="after">
+        <![CDATA[
+    /* 
+     * Os setters abaixo, assim como os da linha 4, não estão sendo utilizados no momento,
+     * em razão das funções geradoras das linhas 4 e 5 que foram modificadas no model GeradorArquivoObn 
+     * para receberem um parametro com os dados do empagemovdetalhetransmissao (fatura/convênio) e plugins.empagemovpagamento (GRU)
+     */
+
+    $oDadosLinha->setTipoPagamento($oStdResultadoQuery->tipopagamento);
+    $oDadosLinha->setCodReceita($oStdResultadoQuery->codreceita);
+    $oDadosLinha->setCodIdentificacao($oStdResultadoQuery->codidentificacao);
+    $oDadosLinha->setPeriodoApuracao($oStdResultadoQuery->periodoapuracao);
+    $oDadosLinha->setDataVencimento($oStdResultadoQuery->datavencimento);
+    $oDadosLinha->setMesAnoCompetencia($oStdResultadoQuery->mesanocompetencia);
+    $oDadosLinha->setNumReferencia($oStdResultadoQuery->numreferencia);
+    $oDadosLinha->setValorINSS($oStdResultadoQuery->valorinss);
+    $oDadosLinha->setValorOutras($oStdResultadoQuery->valoroutras);
+    $oDadosLinha->setAtualizacaoMonetaria($oStdResultadoQuery->atualizacaomonetaria);
+    $oDadosLinha->setValorReceitaBruta($oStdResultadoQuery->valorreceitabruta);
+    $oDadosLinha->setPercentualReceita($oStdResultadoQuery->percentualreceita);
+    $oDadosLinha->setValorPrincipal($oStdResultadoQuery->valorprincipal);
+    $oDadosLinha->setValorMulta($oStdResultadoQuery->valormulta);
+    $oDadosLinha->setJurosEncargos($oStdResultadoQuery->jurosencargos);]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search><![CDATA[]]></search>
+      <add position="after">
+        <![CDATA[]]>
+      </add>
+    </operation>
+  </file>
+</modification>

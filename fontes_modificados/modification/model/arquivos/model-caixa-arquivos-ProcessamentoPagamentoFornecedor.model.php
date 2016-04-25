@@ -332,6 +332,7 @@ class ProcessamentoPagamentoFornecedor {
       throw new BusinessException($sMsgArquivoProcessado);
     }
     foreach ($this->oRegistroArquivo->registros as $oRegistro) {
+      /* Plugin ArquivoOBNGRU - Parte 2 */
       if (isset($oRegistro->numero_autenticacao) && !empty($oRegistro->numero_autenticacao)){
         
         $oAutent = new stdClass();
@@ -377,7 +378,6 @@ class ProcessamentoPagamentoFornecedor {
       }
     }
     
-//====== INSERIR AQUI!!!! =========//
     foreach ($aRetornosPagamento as $oRetornoPagamento) {
       
       if(!empty($oRetornoPagamento->codigo_barras)) {
@@ -415,7 +415,6 @@ class ProcessamentoPagamentoFornecedor {
       }
 
     }
-//=================================// 
 
     /*
      * Executamos o array_diff para descobrir qual dos movimentos enviados o banco não retornou 

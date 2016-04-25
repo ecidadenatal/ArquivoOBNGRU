@@ -122,7 +122,6 @@ $clrotulo->label("k17_slip");
     <legend><strong>Filtros de Pesquisa</strong></legend>
       <table border="0" align='left' >
 
-
         <tr>
           <td colspan="1">
             <strong>Forma de Consulta:</strong>
@@ -134,8 +133,6 @@ $clrotulo->label("k17_slip");
             ?>
           </td>
         </tr>
-
-
 
         <tr>
           <td>
@@ -183,21 +180,21 @@ $clrotulo->label("k17_slip");
           </tr>
 
 
-				  <tr id='ctnSlip' style="display:none;">
-				     <td nowrap title="<?=@$Tk17_slip?>">
-				       <? db_ancora("<b>Slip</b>","js_pesquisak17_slip(true);",1);  ?>
-				     </td>
-				     <td nowrap>
-				       <? db_input('k17_slip',10,$Ie82_codord,true,'text',1, "onchange='js_pesquisak17_slip(false);'")?>
-				       </td>
-				       <td>
-				       <? db_ancora("<b>até:</b>","js_pesquisak17_slip02(true);",1);  ?>
-				     </td>
-				     <td nowrap align="left">
-				       <? db_input('k17_slip02',10,$Ie82_codord,true,'text',1,
-				                   "onchange='js_pesquisak17_slip02(false);'")?>
-				     </td>
-				  </tr>
+          <tr id='ctnSlip' style="display:none;">
+             <td nowrap title="<?=@$Tk17_slip?>">
+               <? db_ancora("<b>Slip</b>","js_pesquisak17_slip(true);",1);  ?>
+             </td>
+             <td nowrap>
+               <? db_input('k17_slip',10,$Ie82_codord,true,'text',1, "onchange='js_pesquisak17_slip(false);'")?>
+               </td>
+               <td>
+               <? db_ancora("<b>até:</b>","js_pesquisak17_slip02(true);",1);  ?>
+             </td>
+             <td nowrap align="left">
+               <? db_input('k17_slip02',10,$Ie82_codord,true,'text',1,
+                           "onchange='js_pesquisak17_slip02(false);'")?>
+             </td>
+          </tr>
 
 
          <tr id='ctnEmpenho' style='display:none;'>
@@ -286,18 +283,18 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
 
 
-var sUrlRPC 						 = "emp4_configuracaoarquivoenvio.RPC.php";
+var sUrlRPC              = "emp4_configuracaoarquivoenvio_natal.RPC.php";
 var sArquivoMensagens    = "financeiro.caixa.emp4_configuracaoarquivoenvio001";
 
 var iCodigoRecursoFundeb = null;
-var oDBCodigoBarra 			 = null;
+var oDBCodigoBarra       = null;
 
 function js_criaCodigoBarra(){
 
-  		oDBCodigoBarra = new DBCodigoBarra("txtCodigoBarra", "oDBCodigoBarra");
-		  oDBCodigoBarra.setLabelCodigoBarra("Código de Barras:");
-		  oDBCodigoBarra.setMensagemLeitura('Aguardando leitura.');
-		  oDBCodigoBarra.criaComponentes();
+      oDBCodigoBarra = new DBCodigoBarra("txtCodigoBarra", "oDBCodigoBarra");
+      oDBCodigoBarra.setLabelCodigoBarra("Código de Barras:");
+      oDBCodigoBarra.setMensagemLeitura('Aguardando leitura.');
+      oDBCodigoBarra.criaComponentes();
       oDBCodigoBarra.setCallBackInicioLeitura(function() {
 
         oTxtValor.setValue('');
@@ -328,7 +325,8 @@ function js_criaCodigoBarra(){
         }
       });
 
-		  oDBCodigoBarra.show('codigodebarras', 'linhadigitavel');
+      oDBCodigoBarra.show('codigodebarras', 'linhadigitavel');
+      $('btnCodigoBarra').style.display        = 'none';
 }
 
 $('btnGerarArquivoTXT').observe('click', function() {
@@ -341,38 +339,37 @@ function js_tipoFatura(iTipoFatura){
 
   switch (iTipoFatura) {
 
-	  case "1" :
+    case "1" :
 
-		  $("iTipoFatura").options.length = 0;
-		  $("iTipoFatura").options[0]     = new Option("Fatura"      , "1");
-		  $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
+      $("iTipoFatura").options.length = 0;
+      $("iTipoFatura").options[0]     = new Option("Fatura"      , "1");
+      $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
       $("iTipoFatura").options[2]     = new Option("GPS"         , "3");
       $("iTipoFatura").options[3]     = new Option("DARF"        , "4");
       $("iTipoFatura").options[4]     = new Option("DARF Simples", "5");
 
-		break;
+    break;
 
-	  case "2" :
+    case "2" :
 
-		  $("iTipoFatura").options.length = 0;
-		  $("iTipoFatura").options[0]     = new Option("Convênio"    , "2");
-		  $("iTipoFatura").options[1]     = new Option("Fatura"      , "1");
+      $("iTipoFatura").options.length = 0;
+      $("iTipoFatura").options[0]     = new Option("Convênio"    , "2");
+      $("iTipoFatura").options[1]     = new Option("Fatura"      , "1");
       $("iTipoFatura").options[2]     = new Option("GPS"         , "3");
       $("iTipoFatura").options[3]     = new Option("DARF"        , "4");
       $("iTipoFatura").options[4]     = new Option("DARF Simples", "5");
 
-		break;
+    break;
 
-		default :
+    default :
 
-			$("iTipoFatura").options.length = 0;
-		  $("iTipoFatura").options[0]     = new Option("Fatura"      , "1");
-		  $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
+      $("iTipoFatura").options.length = 0;
+      $("iTipoFatura").options[0]     = new Option("Fatura"      , "1");
+      $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
       $("iTipoFatura").options[2]     = new Option("GPS"         , "3");
       $("iTipoFatura").options[3]     = new Option("DARF"        , "4");
       $("iTipoFatura").options[4]     = new Option("DARF Simples", "5");
-		break;
-
+    break;
 
   }
 
@@ -383,16 +380,16 @@ function js_tipoFatura(iTipoFatura){
 
 function js_getTipoTransmissao(iMovimento, iCodigoRecurso) {
 
-	  var msgDiv      = "Buscando Dados <br>Aguarde ...";
-		var oParametros = new Object();
+    var msgDiv      = "Buscando Dados <br>Aguarde ...";
+    var oParametros = new Object();
 
-	  js_divCarregando(_M(sArquivoMensagens + ".buscando_tipo_transmissao"),'msgBox');
+    js_divCarregando(_M(sArquivoMensagens + ".buscando_tipo_transmissao"),'msgBox');
 
-		oParametros.exec       = "getTipoTransmissao";
-		oParametros.iMovimento = iMovimento;
-		oParametros.iCodigoRecurso = iCodigoRecurso;
+    oParametros.exec       = "getTipoTransmissao";
+    oParametros.iMovimento = iMovimento;
+    oParametros.iCodigoRecurso = iCodigoRecurso;
 
-		new Ajax.Request(sUrlRPC,
+    new Ajax.Request(sUrlRPC,
                    {method: "post",
                     parameters:'json='+Object.toJSON(oParametros),
                     onComplete: js_retornoTipoTransmissao
@@ -413,15 +410,15 @@ function js_retornoTipoTransmissao(oAjax){
   oRetorno.aDados.each(function (oDado, iInd) {
 
     if (iInd == 0) {
-  	  js_exibeCamposObn(oDado.e57_sequencial);
+      js_exibeCamposObn(oDado.e57_sequencial);
     }
 
-	  var oOption = new Option(oDado.e57_descricao.urlDecode(), oDado.e57_sequencial);
-	  if (iCodigoRecursoFundeb == oRetorno.iCodigoRecurso && oDado.e57_sequencial != 1) {
+    var oOption = new Option(oDado.e57_descricao.urlDecode(), oDado.e57_sequencial);
+    if (iCodigoRecursoFundeb == oRetorno.iCodigoRecurso && oDado.e57_sequencial != 1) {
 
-	    oOption.selected = true;
-	    js_exibeCamposObn(oDado.e57_sequencial);
-	  }
+      oOption.selected = true;
+      js_exibeCamposObn(oDado.e57_sequencial);
+    }
     $("iTipoTransmissao").appendChild(oOption);
 
 
@@ -433,22 +430,22 @@ function js_retornoTipoTransmissao(oAjax){
 
 function js_formaConsulta() {
 
-	var iFomaconsulta = $F('iFomaconsulta');
+  var iFomaconsulta = $F('iFomaconsulta');
 
-	switch (iFomaconsulta) {
+  switch (iFomaconsulta) {
 
-		case '0' :
+    case '0' :
 
-			$('ctnEmpenho').style.display = "table-row";
-	    $('ctnSlip')   .style.display = "none";
-		break;
+      $('ctnEmpenho').style.display = "table-row";
+      $('ctnSlip')   .style.display = "none";
+    break;
 
-		case '1' :
+    case '1' :
 
-			$('ctnEmpenho').style.display = "none";
-		  $('ctnSlip')   .style.display = "table-row";
-		break;
-	}
+      $('ctnEmpenho').style.display = "none";
+      $('ctnSlip')   .style.display = "table-row";
+    break;
+  }
 }
 js_formaConsulta();
 
@@ -458,46 +455,46 @@ function js_pesquisar(){
 
   var sRpcPesquisa   = "emp4_manutencaoPagamentoRPC.php";
 
-	var dtInicial      = $F("datainicial");
-	var dtFinal        = $F("datafinal");
-	var iOrdemInicial  = $F('e82_codord');
-	var iOrdemFinal    = $F('e82_codord02');
-	var iSlipInicial   = $F('k17_slip');
-	var iSlipFinal     = $F('k17_slip02');
-	var iEmpenho       = $F('e60_codemp');
-	var iCredor        = $F('z01_numcgm');
-	var iRecurso       = $F('o15_codigo');
-	var iFormaConsulta = $F('iFomaconsulta');
+  var dtInicial      = $F("datainicial");
+  var dtFinal        = $F("datafinal");
+  var iOrdemInicial  = $F('e82_codord');
+  var iOrdemFinal    = $F('e82_codord02');
+  var iSlipInicial   = $F('k17_slip');
+  var iSlipFinal     = $F('k17_slip02');
+  var iEmpenho       = $F('e60_codemp');
+  var iCredor        = $F('z01_numcgm');
+  var iRecurso       = $F('o15_codigo');
+  var iFormaConsulta = $F('iFomaconsulta');
 
  // var msgDiv               = "Pesquisando Registros <br> Aguarde ...";
 
   var oParam               = new Object();
       oParam.lObn          = true;
-	    oParam.dtDataIni     = dtInicial;
-	    oParam.dtDataFim     = dtFinal;
-	    oParam.iNumCgm       = iCredor;
-	    oParam.iRecurso      = iRecurso;
+      oParam.dtDataIni     = dtInicial;
+      oParam.dtDataFim     = dtFinal;
+      oParam.iNumCgm       = iCredor;
+      oParam.iRecurso      = iRecurso;
   switch (iFormaConsulta) {
 
   case '0' :  // Empenho
 
-	  var sExec            = 'getMovimentos';
-	  oParam.iOrdemIni     = iOrdemInicial;
-	  oParam.iOrdemFim     = iOrdemFinal;
-	  oParam.iCodEmp       = iEmpenho;
-	  oParam.iOPauxiliar   = '';
-	  oParam.iAutorizadas  = '';
-	  oParam.iOPManutencao = '';
-	  oParam.orderBy       = '';
-	  oParam.lVinculadas   = false;
-	break;
+    var sExec            = 'getMovimentos';
+    oParam.iOrdemIni     = iOrdemInicial;
+    oParam.iOrdemFim     = iOrdemFinal;
+    oParam.iCodEmp       = iEmpenho;
+    oParam.iOPauxiliar   = '';
+    oParam.iAutorizadas  = '';
+    oParam.iOPManutencao = '';
+    oParam.orderBy       = '';
+    oParam.lVinculadas   = false;
+  break;
 
   case '1' :  // Slip
 
-	  var sExec        = 'getMovimentosSlip';
-	    oParam.iOrdemIni     = iSlipInicial;
-		  oParam.iOrdemFim     = iSlipFinal;
-	break;
+    var sExec        = 'getMovimentosSlip';
+      oParam.iOrdemIni     = iSlipInicial;
+      oParam.iOrdemFim     = iSlipFinal;
+  break;
 
   }
 
@@ -537,10 +534,8 @@ function js_retornoPesquisa(oAjax){
               oRetorno.aNotasLiquidacao.each(function (oDado, iInd) {
 
                 var aRow   = new Array();
-                /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte0] */
                 var faturaAnexo = (oDado.fatura == "t") ? "Sim" : "Não";
         
-                /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte0] */
                 aRow[0] = oDado.e81_codmov; // movimento
                 aRow[1] = oDado.e60_codemp + "/" + oDado.e60_anousu; // empenho
                 aRow[2] = oDado.o15_codigo ; // recurso
@@ -562,12 +557,9 @@ function js_retornoPesquisa(oAjax){
                 aRow[3] = sCodigoConta + " - " + sDescricaoConta ; // conta pagadora
                 aRow[4] = oDado.z01_numcgm  + " - " + oDado.z01_nome.urlDecode(); // credor
                 aRow[5] = js_formatar(oDado.e81_valor, "f"); // valor
-                
-               /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte1] */
                 aRow[6] = (oDado.fatura == "t") ? "Sim" : "Não";
                 aRow[7] = "<input type='button' value='Editar' onclick='js_criaJanelaDetalhes("+oDado.e81_codmov+", "+oDado.o15_codigo+");'  ";
         
-                /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte1] */
                 oGridConfiguracao.addRow(aRow);
                 if (oDado.e25_empagetipotransmissao == '2') {
                   oGridConfiguracao.aRows[iInd].setClassName('configurada');
@@ -594,13 +586,11 @@ function js_retornoPesquisa(oAjax){
               aRow[4] = oDado.z01_numcgm  + " - " + oDado.z01_nome.urlDecode();
               aRow[5] = js_formatar(oDado.k17_valor, "f");
               
-             /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte2] */
               aRow[6] = (oDado.fatura == "t") ? "Sim" : "Não";
               aRow[7] = "<input type='button' value='Editar' onclick='js_criaJanelaDetalhes("+oDado.e81_codmov+", "+oDado.c61_codigo+");'  ";
          
               aValoresMovimentos[oDado.e81_codmov] = oDado.k17_valor;
         
-              /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte2] */
               oGridConfiguracao.addRow(aRow);
               if (oDado.e25_empagetipotransmissao == '2') {
                 oGridConfiguracao.aRows[iInd].setClassName('configurada');
@@ -621,16 +611,16 @@ function js_retornoPesquisa(oAjax){
 
 function js_getDetalhes(iMovimento) {
 
-	 // var msgDiv      = "Buscando Registros <br> Aguarde ...";
-		var oParametros = new Object();
+   // var msgDiv      = "Buscando Registros <br> Aguarde ...";
+    var oParametros = new Object();
     $('TotalForCol2').innerHTML = '0,00';
 
-	  js_divCarregando(_M("financeiro.caixa.emp4_configuracaoarquivoenvio001.buscando_detalhes"),'msgBox');
+    js_divCarregando(_M("financeiro.caixa.emp4_configuracaoarquivoenvio001.buscando_detalhes"),'msgBox');
 
 
-	  oParametros.exec       = "getDetalhes";
-	  oParametros.iMovimento = iMovimento;
-	  new Ajax.Request(sUrlRPC,
+    oParametros.exec       = "getDetalhes";
+    oParametros.iMovimento = iMovimento;
+    new Ajax.Request(sUrlRPC,
                     {method: "post",
                      parameters:'json='+Object.toJSON(oParametros),
                      onComplete: js_retornoGetDetalhes
@@ -642,11 +632,11 @@ function js_retornoGetDetalhes(oAjax){
     js_removeObj('msgBox');
     var oRetorno = eval("("+oAjax.responseText+")");
 
-	  oGridConfiguracaoDetalhe.clearAll(true);
+    oGridConfiguracaoDetalhe.clearAll(true);
     var nValorTotal = 0;
     if (oRetorno.aDados.length > 0) {
-        oRetorno.aDados.each(function (oDado, iInd) {
 
+        oRetorno.aDados.each(function (oDado, iInd) {
             var aRow  = [];
               aRow[0] = oDado.e74_codigodebarra ;
               aRow[1] = js_formatar(oDado.e74_valornominal, "f")  ;
@@ -655,6 +645,17 @@ function js_retornoGetDetalhes(oAjax){
               aRow[4] = js_formatar(oDado.e74_datavencimento,'d');
               aRow[5] = oDado.sFatura.urlDecode();
               aRow[6] = oDado.e74_linhadigitavel;
+              aRow[8]  = '-';
+              aRow[9]  = '-';
+              aRow[10] = '-';
+              aRow[11] = '-';
+              aRow[12] = '-';
+              aRow[13] = '-';
+              aRow[14] = '-';
+              aRow[15] = '-';
+              aRow[16] = '-';
+              aRow[17] = '-';
+              aRow[18] = '-';
 
               oGridConfiguracaoDetalhe.addRow(aRow);
               nValorTotal += new Number(oDado.e74_valornominal).valueOf();
@@ -663,6 +664,7 @@ function js_retornoGetDetalhes(oAjax){
     }
 
     if (oRetorno.aDadosPagamento.length > 0) {
+  
         oRetorno.aDadosPagamento.each(function (oDadoPagamento, iInd) {
 
             var aRow   = [];
@@ -702,26 +704,23 @@ function js_salvarDetalhes(iMovimento){
     var nTotalMovimentos = Number(aValoresMovimentos[iMovimento]);
     var nTotalLancamentos = 0;
 
-	  var iTipoTransmissao             = $F('iTipoTransmissao');
-	  //var msgDiv                       = "Salvando Registros <br> Aguarde ...";
-		var oParametros                  = new Object();
-	      oParametros.exec             = 'salvarDetalhes';
-	      oParametros.iMovimento       = iMovimento;
-	      oParametros.iTipoTransmissao = iTipoTransmissao;
-          /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte3] */
-              oParametros.fatura        = $F('iFatura');
-        
-          /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte3] */
-	      oParametros.aDetalhes        = new Array();
+    var iTipoTransmissao             = $F('iTipoTransmissao');
+    //var msgDiv                       = "Salvando Registros <br> Aguarde ...";
+    var oParametros                  = new Object();
+        oParametros.exec             = 'salvarDetalhes';
+        oParametros.iMovimento       = iMovimento;
+        oParametros.iTipoTransmissao = iTipoTransmissao;
+        oParametros.fatura        = $F('iFatura');
+        oParametros.aDetalhes        = new Array();
 
-	  if (iTipoTransmissao == "") {
+    if (iTipoTransmissao == "") {
 
       alert('Selecione um tipo de Transmissão.');
       return false;
-		}
+    }
 
     if (iTipoTransmissao == "1") {
-    	oGridConfiguracaoDetalhe.clearAll(true);
+      oGridConfiguracaoDetalhe.clearAll(true);
     }
 
     oGridConfiguracaoDetalhe.aRows.each(function (oRow, iIndice) {
@@ -759,14 +758,14 @@ function js_salvarDetalhes(iMovimento){
       return alert('Valor total dos lançamentos deve ser igual ao do movimento: ' + js_formatar(nTotalMovimentos, 'f'));
     }
 
-	  //js_divCarregando(msgDiv,'msgBox');
-	  js_divCarregando(_M(sArquivoMensagens + ".salvando_detalhes"), 'msgBox');
+    //js_divCarregando(msgDiv,'msgBox');
+    js_divCarregando(_M(sArquivoMensagens + ".salvando_detalhes"), 'msgBox');
 
-	  new Ajax.Request(sUrlRPC,
-	                          {method: "post",
-	                           parameters:'json='+Object.toJSON(oParametros),
-	                           onComplete: js_retornoSalvarDetalhes
-	                          });
+    new Ajax.Request(sUrlRPC,
+                            {method: "post",
+                             parameters:'json='+Object.toJSON(oParametros),
+                             onComplete: js_retornoSalvarDetalhes
+                            });
 }
 
 function js_retornoSalvarDetalhes(oAjax) {
@@ -789,12 +788,12 @@ function js_incluirDetalhe(iMovimento){
 
   var iCodigoBarra          = $F('txtCodigoBarra');
   var iLinhaDigitavel       = $F('txtLinhaDigitavel').replace(/[^0-9]/g, '');
-	var nValor                = $F('txtValor');
-	var nJuros                = $F('txtJuros');
-	var nDesconto             = $F('txtDesconto');
-	var dtData                = $F('txtData');
-	var iFatura               = $F('iTipoFatura');
-	var sFatura               = "Fatura";
+  var nValor                = $F('txtValor');
+  var nJuros                = $F('txtJuros');
+  var nDesconto             = $F('txtDesconto');
+  var dtData                = $F('txtData');
+  var iFatura               = $F('iTipoFatura');
+  var sFatura               = "Fatura";
   var iCodReceita           = $F('txtCodReceita');
   var iCodIdent             = $F('txtCodIdent');
   var iNumReferencia        = $F('txtNumReferencia');
@@ -808,9 +807,9 @@ function js_incluirDetalhe(iMovimento){
   var nPercentualReceita    = $F('txtPercentualReceita');
   var nJurosEncargos        = $F('txtJurosEncargos');
 
-	if (iFatura == '2') {
-		sFatura = "Convênio";
-	} else if (iFatura == '3') {
+  if (iFatura == '2') {
+    sFatura = "Convênio";
+  } else if (iFatura == '3') {
     sFatura = "GPS";
   } else if (iFatura == '4') {
     sFatura = "DARF";
@@ -819,19 +818,19 @@ function js_incluirDetalhe(iMovimento){
   }
 
   if (iFatura == '1' || iFatura == '2') {
-  	
+    
     if (iCodigoBarra == '') {
 
-  		alert('Obrigatório preenchimento do código de barras.');
-  		//$('txtCodigoBarra').focus();
-  		return false;
+      alert('Obrigatório preenchimento do código de barras.');
+      //$('txtCodigoBarra').focus();
+      return false;
     }
 
-  	if (iCodigoBarra.length > 44) {
+    if (iCodigoBarra.length > 44) {
 
       alert('O código de barras deve ser no padrão de 44 posições');
       return false;
-  	}
+    }
 
     var lCodigoBarraDuplicado = false;
     oGridConfiguracaoDetalhe.aRows.each(function(oRows) {
@@ -906,6 +905,14 @@ function js_incluirDetalhe(iMovimento){
     nAtualizacaoMonetaria = "0";
   }
 
+  if (iCodReceita == '') {
+    iCodReceita = null;
+  }
+
+  if (iCodIdent == '') {
+    iCodIdent = null;
+  }
+
   if (iNumReferencia == '') {
     iNumReferencia = null;
   }
@@ -956,11 +963,11 @@ function js_incluirDetalhe(iMovimento){
   $('TotalForCol2').innerHTML = js_formatar(js_strToFloat($('TotalForCol2').innerHTML) +  Number(nValor), 'f');
 
   $('txtCodigoBarra').value          = '';
-	$('txtValor').value                = '';
-	$('txtJuros').value                = '';
-	$('txtDesconto').value             = '';
-	$('txtData').value                 = '';
-	$('txtLinhaDigitavel').value       = '';
+  $('txtValor').value                = '';
+  $('txtJuros').value                = '';
+  $('txtDesconto').value             = '';
+  $('txtData').value                 = '';
+  $('txtLinhaDigitavel').value       = '';
   $('txtCodIdent').value             = '';
   $('txtCodReceita').value           = '';
   $('txtMesCompetencia').value       = '';
@@ -974,13 +981,15 @@ function js_incluirDetalhe(iMovimento){
   $('txtPeriodoApuracao').value      = '';
   $('txtPercentualReceita').value    = '';
   $('txtNumReferencia').value        = '';
-	$('txtCodigoBarra').focus();
+  $('txtCodigoBarra').focus();
+
+  $('iTipoFatura').disabled = true;
 }
 
 //================== Excluir Detalhes ============//
 function js_removerDetalhes(iMovimento){
 
-	var aListaCheckbox         = oGridConfiguracaoDetalhe.getSelection('object');
+  var aListaCheckbox         = oGridConfiguracaoDetalhe.getSelection('object');
 
   if (aListaCheckbox.length == 0) {
     alert('Selecione um registro para excluir.');
@@ -989,12 +998,12 @@ function js_removerDetalhes(iMovimento){
 
   var nValorParaSubtrair = 0;
   var aLinhasRemover = [];
-	aListaCheckbox.each(
-	  function ( oRow, iSeq ) {
+  aListaCheckbox.each(
+    function ( oRow, iSeq ) {
       nValorParaSubtrair += js_strToFloat(oRow.aCells[2].getValue());
       aLinhasRemover.push(oRow.getRowNumber());
     }
-	);
+  );
 
   var sMensagemExclusao = 'Excluir selecionados?';
   sMensagemExclusao += '\nPara confirmar operação, é necessário clicar no botão "Salvar".';
@@ -1036,37 +1045,35 @@ function js_criaGridConfiguracao() {
 
   oGridConfiguracao = new DBGrid('oGridConfiguracao');
   oGridConfiguracao.nameInstance = 'oGridConfiguracao';
+
+  oGridConfiguracao.setCellWidth(new Array( '100px' ,
+                                            '100px',
+                                            '100px',
+                                            '200px',
+                                            '200px',
+                                            '100px',
+                                            '100px',
+                                            '80px'
+                                           ));
+  oGridConfiguracao.setCellAlign(new Array( 'left'  ,
+                                            'left'  ,
+                                            'left',
+                                            'left',
+                                            'left',
+                                            'right',
+                                            'center',
+                                            'center'
+                                           ));
+  oGridConfiguracao.setHeader(new Array( 'Cód.Mov',
+                                         'Emp. / Slip',
+                                         'Recurso',
+                                         'Cta. Pagadora',
+                                         'Nome',
+                                         'Valor',
+                                         'Fatura Anexo',
+                                         'Ação'
+                                        ));
   
-/* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte4] */
-         oGridConfiguracao.setCellWidth(new Array( '100px' ,
-                                                   '100px',
-                                                   '100px',
-                                                   '200px',
-                                                   '200px',
-                                                   '100px',
-                                                   '100px',
-                                                   '80px'
-                                                  ));
-         oGridConfiguracao.setCellAlign(new Array( 'left'  ,
-                                                   'left'  ,
-                                                   'left',
-                                                   'left',
-                                                   'left',
-                                                   'right',
-                                                   'center',
-                                                   'center'
-                                                  ));
-         oGridConfiguracao.setHeader(new Array( 'Cód.Mov',
-                                                'Emp. / Slip',
-                                                'Recurso',
-                                                'Cta. Pagadora',
-                                                'Nome',
-                                                'Valor',
-                                                'Fatura Anexo',
-                                                'Ação'
-                                               ));
-        
-  /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte4] */
   oGridConfiguracao.setHeight(150);
   oGridConfiguracao.show($('ctnGridConfiguracao'));
   oGridConfiguracao.clearAll(true);
@@ -1078,15 +1085,15 @@ js_criaGridConfiguracao();
 //===================== chamada de funçoes da janela de detalhes ==========//
 function js_criaJanelaDetalhes(iCodMov, iCodigoRecurso) {
 
-	if ( $('sTituloWindow') &&  $('sTituloWindow').innerHTML != '' ) {
-		$('sTituloWindow').innerHTML = '';
+  if ( $('sTituloWindow') &&  $('sTituloWindow').innerHTML != '' ) {
+    $('sTituloWindow').innerHTML = '';
   }
 
-	js_viewConfiguracao(iCodMov);
-	js_criaGridDetalhes();
-	js_getDetalhes(iCodMov);
-	js_getTipoTransmissao(iCodMov, iCodigoRecurso);
-	js_criaCodigoBarra();
+  js_viewConfiguracao(iCodMov);
+  js_criaGridDetalhes();
+  js_getDetalhes(iCodMov);
+  js_getTipoTransmissao(iCodMov, iCodigoRecurso);
+  js_criaCodigoBarra();
 
 }
 
@@ -1094,10 +1101,10 @@ function js_criaJanelaDetalhes(iCodMov, iCodigoRecurso) {
 
 function js_criaGridDetalhes() {
 
-	  oGridConfiguracaoDetalhe = new DBGrid('oGridConfiguracaoDetalhe');
-	  oGridConfiguracaoDetalhe.nameInstance = 'oGridConfiguracaoDetalhe';
-	  oGridConfiguracaoDetalhe.setCheckbox(0);
-	  oGridConfiguracaoDetalhe.setCellWidth(['240px',
+    oGridConfiguracaoDetalhe = new DBGrid('oGridConfiguracaoDetalhe');
+    oGridConfiguracaoDetalhe.nameInstance = 'oGridConfiguracaoDetalhe';
+    oGridConfiguracaoDetalhe.setCheckbox(0);
+    oGridConfiguracaoDetalhe.setCellWidth(['240px',
                                            '100px',
                                            ' 70px',
                                            ' 70px',
@@ -1116,9 +1123,9 @@ function js_criaGridDetalhes() {
                                            '  0px',
                                            '  0px',
                                            '  0px'
-	                                           ]);
-	  oGridConfiguracaoDetalhe.setCellAlign(['left',
-                                           'right'  ,
+                                             ]);
+    oGridConfiguracaoDetalhe.setCellAlign(['left',
+                                           'right',
                                            'right',
                                            'right',
                                            'center',
@@ -1136,31 +1143,31 @@ function js_criaGridDetalhes() {
                                            'center',
                                            'center',
                                            'center']);
-	  oGridConfiguracaoDetalhe.setHeader(['Código de Barras',      //1
-                                        'Valor',                 //2
-                                        'Juros',                 //3
-                                        'Desconto',              //4
-                                        'Data',                  //5
-                                        'Tipo de Fatura',        //6
-                                        'Linha Digitável',       //7
-                                        'Cód. Receita',          //8
-                                        'Cód. Ident.',           //9
-                                        'NumReferencia',        //10
-                                        'MesAnoCompetencia',    //11
-                                        'PeriodoApuracao',      //12 
-                                        'ValorINSS',            //13
-                                        'ValorOutras',          //14
-                                        'AtualizacaoMonetaria', //15
-                                        'ValorReceitaBruta',    //16
-                                        'ValorMulta',           //17
-                                        'PercentualReceita',    //18
-                                        'JurosEncargos']);     //19
-	  oGridConfiguracaoDetalhe.hasTotalizador = true;
-	  oGridConfiguracaoDetalhe.setHeight(150);
+    oGridConfiguracaoDetalhe.setHeader(['Código de Barras',    
+                                        'Valor',               
+                                        'Juros',               
+                                        'Desconto',            
+                                        'Data',                
+                                        'Tipo de Fatura',      
+                                        'Linha Digitável',     
+                                        'Cód. Receita',        
+                                        'Cód. Ident.',         
+                                        'NumReferencia',       
+                                        'MesAnoCompetencia',   
+                                        'PeriodoApuracao',     
+                                        'ValorINSS',           
+                                        'ValorOutras',         
+                                        'AtualizacaoMonetaria',
+                                        'ValorReceitaBruta',   
+                                        'ValorMulta',          
+                                        'PercentualReceita',   
+                                        'JurosEncargos']);     
+    oGridConfiguracaoDetalhe.hasTotalizador = true;
+    oGridConfiguracaoDetalhe.setHeight(150);
 
     oGridConfiguracaoDetalhe.aHeaders[3].lDisplayed  = false;
     oGridConfiguracaoDetalhe.aHeaders[4].lDisplayed  = false;
-	  oGridConfiguracaoDetalhe.aHeaders[7].lDisplayed  = false;
+    oGridConfiguracaoDetalhe.aHeaders[7].lDisplayed  = false;
     oGridConfiguracaoDetalhe.aHeaders[10].lDisplayed = false;
     oGridConfiguracaoDetalhe.aHeaders[11].lDisplayed = false;
     oGridConfiguracaoDetalhe.aHeaders[12].lDisplayed = false;
@@ -1172,26 +1179,26 @@ function js_criaGridDetalhes() {
     oGridConfiguracaoDetalhe.aHeaders[18].lDisplayed = false;
     oGridConfiguracaoDetalhe.aHeaders[19].lDisplayed = false;
 
-	  oGridConfiguracaoDetalhe.show($('ctnGridConfiguracaoDetalhes'));
-	  oGridConfiguracaoDetalhe.clearAll(true);
+    oGridConfiguracaoDetalhe.show($('ctnGridConfiguracaoDetalhes'));
+    oGridConfiguracaoDetalhe.clearAll(true);
 }
 
 //================== Janela para Configurar detalhes ============//
 function js_viewConfiguracao (iCodMov) {
 
-	  var iMovimento     = iCodMov;
-	  var iLarguraJanela = 870;
-	  var iAlturaJanela  = 650;
+    var iMovimento     = iCodMov;
+    var iLarguraJanela = 870;
+    var iAlturaJanela  = 650;
 
     if (typeof(windowDetalhes) != 'undefined' && windowDetalhes instanceof windowAux) {
       windowDetalhes.destroy();
     }
 
-	  windowDetalhes   = new windowAux( 'windowDetalhes',
-	                                    'Configuração do Movimento',
-	                                    iLarguraJanela,
-	                                    iAlturaJanela
-	                                    );
+    windowDetalhes   = new windowAux( 'windowDetalhes',
+                                      'Configuração do Movimento',
+                                      iLarguraJanela,
+                                      iAlturaJanela
+                                      );
     
 
     var sConteudoDetalhes  = "<div>";
@@ -1209,7 +1216,6 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "         <span>" + iMovimento + "</span>  ";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
-
 
       sConteudoDetalhes += "      <tr nowrap>     ";
       sConteudoDetalhes += "        <td>   ";
@@ -1232,17 +1238,14 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "             <option value='1'>Fatura</option>           ";
       sConteudoDetalhes += "             <option value='2'>Convênio</option>         ";
 
-/* PLUGIN 1 */
       sConteudoDetalhes += "             <option value='3'>GPS</option>         ";
       sConteudoDetalhes += "             <option value='4'>DARF</option>         ";
       sConteudoDetalhes += "             <option value='5'>DARF Simples</option>         ";
-/* FIM PLUGIN 1 */
 
       sConteudoDetalhes += "           </select>";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
 
-/* PLUGIN 2  */
       sConteudoDetalhes += "      <tr id='trCodRecIdent' nowrap>     ";
       sConteudoDetalhes += "        <td >   ";
       sConteudoDetalhes += "         <strong> Cód. Receita Tributo: </strong>  ";
@@ -1282,7 +1285,6 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "          <label id='ctnNumReferencia' style='float:left;'></label>  ";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
-/* FIM PLUGIN 2 */
 
       sConteudoDetalhes += "      <tr nowrap id='linhadigitavel'>     ";
       sConteudoDetalhes += "      </tr>    ";
@@ -1316,8 +1318,6 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "          <label id='ctnDesconto' style='float:left;'></label>  ";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
-
-/* PLUGIN 4 */
 
       sConteudoDetalhes += "      <tr id='trValorINSS' nowrap>     ";
       sConteudoDetalhes += "        <td >   ";
@@ -1390,7 +1390,6 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "          <label id='ctnPeriodoApuracao' style='float:left;'></label>  ";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
-/* FIM PLUGIN 4 */
 
       sConteudoDetalhes += "      <tr id='trData' nowrap>     ";
       sConteudoDetalhes += "        <td >   ";
@@ -1401,7 +1400,6 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
 
-      /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte5] */
       sConteudoDetalhes += "      <tr nowrap>     ";
       sConteudoDetalhes += "        <td >   ";
       sConteudoDetalhes += "         <strong> Com Fatura Anexo? </strong>  ";
@@ -1413,9 +1411,6 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "           </select>";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
-        
-      /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte5] */
-      
       sConteudoDetalhes += " </table> </fieldset>";
 
        sConteudoDetalhes += "<div style='margin-top:10px;'>";
@@ -1459,7 +1454,6 @@ function js_viewConfiguracao (iCodMov) {
      windowDetalhes.show();
      messageBoard.show();
 
-////
   oTxtCodIdent             = new DBTextField('txtCodIdent','oTxtCodIdent', null, 10);
   oTxtCodReceita           = new DBTextField('txtCodReceita','oTxtCodReceita', null, 10);
   oTxtMesCompetencia       = new DBTextField('txtMesCompetencia','oTxtMesCompetencia', null, 2);
@@ -1473,7 +1467,6 @@ function js_viewConfiguracao (iCodMov) {
   oTxtJurosEncargos        = new DBTextField('txtJurosEncargos','oTxtJurosEncargos', null, 10);
   oTxtPeriodoApuracao      = new DBTextFieldData('txtPeriodoApuracao','oTxtPeriodoApuracao', null, 10);
   oTxtNumReferencia        = new DBTextField('txtNumReferencia','oTxtNumReferencia', null, 20);
-////
   oTxtValor        = new DBTextField('txtValor','oTxtValor', null, 10);
   oTxtData         = new DBTextFieldData('txtData','oTxtData', null);
   oTxtJuros        = new DBTextField('txtJuros','oTxtJuros', null, 10);
@@ -1484,8 +1477,6 @@ function js_viewConfiguracao (iCodMov) {
   oTxtMesCompetencia.setMaxLength(2);
   oTxtAnoCompetencia.setMaxLength(4);
 
-
-///
   oTxtCodIdent            .addEvent("onKeyPress", "return js_teclas(event,this)");
   oTxtCodReceita          .addEvent("onKeyPress", "return js_teclas(event,this)");
   oTxtMesCompetencia      .addEvent("onKeyUp", "$('txtAnoCompetencia').focus();");
@@ -1499,13 +1490,10 @@ function js_viewConfiguracao (iCodMov) {
   oTxtPercentualReceita   .addEvent("onKeyPress", "return js_teclas(event,this)");
   oTxtJurosEncargos       .addEvent("onKeyPress", "return js_teclas(event,this)");
   oTxtNumReferencia       .addEvent("onKeyPress", "return js_teclas(event,this)");
-//
   oTxtValor      .addEvent("onKeyPress", "return js_teclas(event,this)");
   oTxtJuros      .addEvent("onKeyPress", "return js_teclas(event,this)");
   oTxtDesconto   .addEvent("onKeyPress", "return js_teclas(event,this)");
 
-
-////
   oTxtCodIdent            .show($('ctnCodIdent'));
   oTxtCodReceita          .show($('ctnCodReceita'));
   oTxtMesCompetencia      .show($('ctnMesCompetencia'));
@@ -1519,7 +1507,6 @@ function js_viewConfiguracao (iCodMov) {
   oTxtJurosEncargos       .show($('ctnJurosEncargos'));
   oTxtPeriodoApuracao     .show($('ctnPeriodoApuracao')); 
   oTxtNumReferencia       .show($('ctnNumReferencia'));
-////
   oTxtValor      .show($('ctnValor'));
   oTxtData       .show($('ctnData'));
   oTxtJuros      .show($('ctnJuros'));
@@ -1556,6 +1543,7 @@ function js_camposTipoFatura(tipoFatura){
       $('codigodebarras').style.display         = 'table-row';
       $('trData').style.display                 = 'table-row';
       $('trValor').style.display                = 'table-row';
+      $('trDesconto').style.display             = 'table-row';
       $('trJuros').style.display                = 'table-row';
     break;
 
@@ -1803,79 +1791,69 @@ function js_mostraslip102(chave1,chave2){
 
 function js_exibeCamposObn(iTipoTransmissao){
 
-	  switch (iTipoTransmissao) {
+    switch (iTipoTransmissao) {
 
-		  case "1" : // CNABs
+      case "1" : // CNABs
 
-			  $('btnCodigoBarra').disabled    = true;
-			  $('txtValor').readOnly          = true;
-			  $('txtLinhaDigitavel').readOnly = true;
-			  $('txtJuros').readOnly          = true;
-			  $('txtDesconto').readOnly       = true;
-			  $('txtData').readOnly           = true;
-			  $('iTipoFatura').disabled       = true;
-			  $('txtValor').value             = '';
-			  $('txtLinhaDigitavel').value    = '';
-			  $('txtJuros').value             = '';
-			  $('txtDesconto').value          = '';
-			  $('txtData').value              = '';
+        $('btnCodigoBarra').disabled    = true;
+        $('txtValor').readOnly          = true;
+        $('txtLinhaDigitavel').readOnly = true;
+        $('txtJuros').readOnly          = true;
+        $('txtDesconto').readOnly       = true;
+        $('txtData').readOnly           = true;
+        $('iTipoFatura').disabled       = true;
+        $('txtValor').value             = '';
+        $('txtLinhaDigitavel').value    = '';
+        $('txtJuros').value             = '';
+        $('txtDesconto').value          = '';
+        $('txtData').value              = '';
+        $('iFatura').disabled           = true;
+        $('txtValor').style.backgroundColor          = '#DEB887';
+        $('txtLinhaDigitavel').style.backgroundColor = '#DEB887';
+        $('txtJuros').style.backgroundColor          = '#DEB887';
+        $('txtDesconto').style.backgroundColor       = '#DEB887';
+        $('txtData').style.backgroundColor           = '#DEB887';
+        $('iTipoFatura').style.backgroundColor       = '#DEB887';
 
-              /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte6] */
-                          $('iFatura').disabled           = true;
-        
-              /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte6] */
+        $('dtjs_txtData').style.display = 'none';
+        $('incluir').disabled = true;
+      break;
 
-			  $('txtValor').style.backgroundColor          = '#DEB887';
-			  $('txtLinhaDigitavel').style.backgroundColor = '#DEB887';
-			  $('txtJuros').style.backgroundColor          = '#DEB887';
-			  $('txtDesconto').style.backgroundColor       = '#DEB887';
-			  $('txtData').style.backgroundColor           = '#DEB887';
-			  $('iTipoFatura').style.backgroundColor       = '#DEB887';
+      case "2" : // OBN
 
-			  $('dtjs_txtData').style.display = 'none';
-			  $('incluir').disabled = true;
-			break;
+        $('btnCodigoBarra').disabled    = false;
+        $('txtValor'). readOnly         = false;
+        $('txtLinhaDigitavel').readOnly = false;
+        $('txtJuros'). readOnly         = false;
+        $('txtDesconto'). readOnly      = false;
+        $('txtData'). readOnly          = false;
+        $('iTipoFatura'). disabled      = false;
+        $('iFatura').disabled           = false;
+        $('txtValor').style.backgroundColor          = '';
+        $('txtLinhaDigitavel').style.backgroundColor = '';
+        $('txtJuros').style.backgroundColor          = '';
+        $('txtDesconto').style.backgroundColor       = '';
+        $('txtData').style.backgroundColor           = '';
+        $('iTipoFatura').style.backgroundColor       = '';
+        $('dtjs_txtData').style.display              = '';
+        $('incluir').disabled                        = false;
+      break;
+    }
+  }
 
-		  case "2" : // OBN
+  /**
+   * Verifica o recurso configurado com FUNDEB
+   */
+  function js_recursoParametroFundeb() {
 
-			  $('btnCodigoBarra').disabled    = false;
-			  $('txtValor'). readOnly         = false;
-			  $('txtLinhaDigitavel').readOnly = false;
-			  $('txtJuros'). readOnly         = false;
-			  $('txtDesconto'). readOnly      = false;
-			  $('txtData'). readOnly          = false;
-			  $('iTipoFatura'). disabled      = false;
+    //js_divCarregando("Aguarde, verificando recurso FUNDEB...", "msgBox");
+    js_divCarregando(_M(sArquivoMensagens + ".verificando_recurso_fundeb"), 'msgBox');
 
-              /* [Inicio plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte7] */
-                          $('iFatura').disabled           = false;
-        
-              /* [Fim plugin GeracaoArquivoOBN  - Geracao arquivo OBN - parte7] */
+    var oParam  = new Object();
+    oParam.exec = "getRecursoFundeb";
 
-			  $('txtValor').style.backgroundColor          = '';
-			  $('txtLinhaDigitavel').style.backgroundColor = '';
-			  $('txtJuros').style.backgroundColor          = '';
-			  $('txtDesconto').style.backgroundColor       = '';
-			  $('txtData').style.backgroundColor           = '';
-			  $('iTipoFatura').style.backgroundColor       = '';
-			  $('dtjs_txtData').style.display              = '';
-			  $('incluir').disabled                        = false;
-		  break;
-	  }
-	}
-
-	/**
-	 * Verifica o recurso configurado com FUNDEB
-	 */
-	function js_recursoParametroFundeb() {
-
-	  //js_divCarregando("Aguarde, verificando recurso FUNDEB...", "msgBox");
-	  js_divCarregando(_M(sArquivoMensagens + ".verificando_recurso_fundeb"), 'msgBox');
-
-	  var oParam  = new Object();
-	  oParam.exec = "getRecursoFundeb";
-
-	  new Ajax.Request(sUrlRPC,
-	                   {method: 'post',
+    new Ajax.Request(sUrlRPC,
+                     {method: 'post',
                       parameters: "json="+Object.toJSON(oParam),
                       onComplete: function (oAjax){
 
@@ -1884,7 +1862,7 @@ function js_exibeCamposObn(iTipoTransmissao){
                         iCodigoRecursoFundeb = oRetorno.iCodigoRecurso;
 
                       }
-	                   });
-	}
-	js_recursoParametroFundeb();
+                     });
+  }
+  js_recursoParametroFundeb();
 </script>

@@ -141,16 +141,14 @@ class PagamentoFornecedorBancoDoBrasilOBN extends PagamentoFornecedorTXTBase imp
           $sValorEfetivado .= substr($oArquivo->valorliquido, 15, 2);
           
           $oRegistro = new stdClass();
-          
-        /* [Inicio plugin GeracaoArquivoOBN  - correcao codigo movimento] */
-          $oRegistro->codigo_movimento = trim((int) $oArquivo->numob);
-        
+          /* [Inicio plugin GeracaoArquivoOBN  - correcao codigo movimento] */          
+          $oRegistro->codigo_movimento = trim((int) $oArquivo->nummov);
           /* [Fim plugin GeracaoArquivoOBN  - correcao codigo movimento] */
           $oRegistro->numero_lote      = "00";
           $oRegistro->mov_lote         = "0000"; 
           $oRegistro->numero_banco     = $oArquivo->codigosiafi; 
           $oRegistro->valor_efetivado  = (float) $sValorEfetivado; 
-          $oRegistro->data_efetivacao  = substr($oArquivo->datamov, 4, 4)."-".substr($oArquivo->datamov, 2, 2)."-".substr($oArquivo->datamov, 0, 2);
+          $oRegistro->data_efetivacao  = date('Y-m-d');
            
           /*
            * Informa qual o tipo de retorno do banco. 
@@ -160,8 +158,6 @@ class PagamentoFornecedorBancoDoBrasilOBN extends PagamentoFornecedorTXTBase imp
           $oRegistro->codigo_retorno  = $this->getCodigoErro( $oArquivo->codretornooperacao );
 
           /* [Inicio plugin GeracaoArquivoOBN  - Observacao ocorrencia] */
-           $oRegistro->observacao    = $oArquivo->observacaoob;
-        
           /* [Fim plugin GeracaoArquivoOBN - Observacao ocorrencia] */
 
           $oDadosRetorno->registros[] = $oRegistro;
@@ -201,10 +197,8 @@ class PagamentoFornecedorBancoDoBrasilOBN extends PagamentoFornecedorTXTBase imp
         case '4' :
 
           $oRegistro = new stdClass();
-          
-          $oRegistro->codigo_movimento = trim((int) $oArquivo->codob);
+          /* Plugin ArquivoOBNGRU - Parte 1 */
 
-          $oRegistro->codigo_barras        = $oArquivo->codigobarra;
           $oRegistro->numero_autenticacao  = $oArquivo->numeroautenticacao;
           $oRegistro->retorno_banco        = $oArquivo->codigoretornooperacao;
           $oRegistro->codigo_retorno       = $this->getCodigoErro( $oArquivo->codigoretornooperacao );
@@ -216,10 +210,8 @@ class PagamentoFornecedorBancoDoBrasilOBN extends PagamentoFornecedorTXTBase imp
         case '5' :
 
           $oRegistro = new stdClass();
+          /* Plugin ArquivoOBNGRU - Parte 2 */
 
-          $oRegistro->codigo_movimento = trim((int) $oArquivo->codigo_ob);
-
-          $oRegistro->codigo_receita       = $oArquivo->cod_rec_tributo;
           $oRegistro->numero_autenticacao  = $oArquivo->numero_autenticacao;
           $oRegistro->retorno_banco        = $oArquivo->retorno_operacao;
           $oRegistro->codigo_retorno       = $this->getCodigoErro($oArquivo->retorno_operacao);
@@ -233,6 +225,7 @@ class PagamentoFornecedorBancoDoBrasilOBN extends PagamentoFornecedorTXTBase imp
     }
 
     $this->oDadosArquivo = $oDadosRetorno;
+
     return true;
   }
 

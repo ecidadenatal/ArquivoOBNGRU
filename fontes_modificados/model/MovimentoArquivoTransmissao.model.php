@@ -33,108 +33,17 @@
  */
 class MovimentoArquivoTransmissao {
 
-  /**
-   * Código do Tipo de Pagamento
-   * @var Integer
-   */
-  private $iTipoPagamento;
-  /**
-   * Código de Receita do Tributo
-   * @var Integer
-   */
-  private $iCodReceita;
-  /**
-   * Código de Identificação do Tributo
-   * @var Integer
-   */
-  private $iCodIdentificacao;
-  /**
-   * Período de Apuração
-   * @var Date
-   */
-  private $dPeriodoApuracao;
-  /**
-   * Data de Vencimento
-   * @var Date
-   */
-  private $dDataVencimento;
-  /**
-   * Mês e Ano de Competência
-   * @var String
-   */
-  private $sMesAnoCompetencia;
-  /**
-   * Número de Referência
-   * @var number
-   */
-  private $nNumReferencia;
-  /**
-   * Valor do INSS
-   * @var number
-   */
-  private $nValorINSS;
-  /**
-   * Valor de Outras Entidades
-   * @var number
-   */
-  private $nValorOutras;
-  /**
-   * Atualização Monetária
-   * @var number
-   */
-  private $nAtualizacaoMonetaria;
-  /**
-   * Valor da Receita Bruta
-   * @var number
-   */
-  private $nValorReceitaBruta;
-  /**
-   * Percentual da Receita
-   * @var number
-   */
-  private $nPercentualReceita;
-  /**
-   * Valor Principal
-   * @var number
-   */
-  private $nValorPrincipal;
-  /**
-   * Valor da Multa
-   * @var number
-   */
-  private $nValorMulta;
-  /**
-   * Valor de Juros e Encargos
-   * @var number
-   */
-  private $nJurosEncargos;
-
-
+  /* Plugin ArquivoOBNGRU - Parte 1 */
+  /* Fim Plugin ArquivoOBNGRU - Parte 1 */
   /**
    * Código de Barra
    * @var String
    */
   private $sCodigoBarra;
 
+  /* Plugin ArquivoOBNGRU - Parte 2 */
+  /* Fim Plugin ArquivoOBNGRU - Parte 2 */
   /* [Inicio plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte1] */
-  /**
-   * Orgao
-   * @var Integer
-   */
-  private $sOrgao;
-  
-  /**
-   * Unidade 
-   * @var Integer
-   */
-  private $iUnidade;  
-  
-  /**
-   * Codigo com ou sem fatura (f - Não, t - Sim)
-   * @var integer
-   */
-  private $iComFatura;
-        
   /* [Fim plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte1] */
 
   /**
@@ -391,193 +300,10 @@ class MovimentoArquivoTransmissao {
    */
   private $lProcessado;
 
+  /* Plugin ArquivoOBNGRU - Parte 3 */
+  /* Fim Plugin ArquivoOBNGRU - Parte 3 */
+
   /* [Inicio plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte2] */
-  /**
-   * Slip Vinculo 
-   * @var integer
-   */
-  private $iSlipVinculo;
-
-  /**
-   * Data do Pagamento
-   * @var date
-   */
-  private $dtPagamento;
-
-
-  public function getTipoPagamento() {
-
-    return $this->iTipoPagamento;
-  }
-
-  public function setTipoPagamento($iTipoPagamento) {
-
-    $this->iTipoPagamento = $iTipoPagamento;
-  }
-
-  public function getCodReceita() {
-
-    return $this->iCodReceita;
-  }
-
-  public function setCodReceita($iCodReceita) {
-
-    $this->iCodReceita = $iCodReceita;
-  }
-
-  public function getCodIdentificacao() {
-
-    return $this->iCodIdentificacao;
-  }
-
-  public function setCodIdentificacao($iCodIdentificacao) {
-
-    $this->iCodIdentificacao = $iCodIdentificacao;
-  }
-
-  public function getPeriodoApuracao() {
-
-    return $this->dPeriodoApuracao;
-  }
-
-  public function setPeriodoApuracao($dPeriodoApuracao) {
-
-    $this->dPeriodoApuracao = $dPeriodoApuracao;
-  }
-
-  public function getMesAnoCompetencia() {
-    
-    return $this->sMesAnoCompetencia;
-  }
-
-  public function setMesAnoCompetencia($sMesAnoCompetencia) {
-
-    $this->sMesAnoCompetencia = $sMesAnoCompetencia;
-  }
-
-  public function getNumReferencia() {
-
-    return $this->nNumReferencia;
-  }
-
-  public function setNumReferencia($nNumReferencia) {
-
-    $this->nNumReferencia = $nNumReferencia;
-  }
-
-  public function getValorINSS() {
-    
-    return $this->nValorINSS;
-  }
-
-  public function setValorINSS($nValorINSS) {
-
-    $this->nValorINSS = $nValorINSS;
-  }
-
-  public function getValorOutras() {
-
-    return $this->nValorOutras;
-  }
-
-  public function setValorOutras($nValorOutras) {
-
-    $this->nValorOutras = $nValorOutras;
-  }
-
-  public function getAtualizacaoMonetaria() {
-
-    return $this->nAtualizacaoMonetaria;
-  }
-
-  public function setAtualizacaoMonetaria($nAtualizacaoMonetaria) {
-
-    $this->nAtualizacaoMonetaria = $nAtualizacaoMonetaria;
-  }
-
-  public function getValorReceitaBruta() {
-
-    return $this->nValorReceitaBruta;
-  }
-
-  public function setValorReceitaBruta($nValorReceitaBruta) {
-
-    $this->nValorReceitaBruta = $nValorReceitaBruta;
-  }
-
-  public function getPercentualReceita() {
-
-    return $this->nPercentualReceita;
-  }
-
-  public function setPercentualReceita($nPercentualReceita) {
-
-    $this->nPercentualReceita = $nPercentualReceita;
-  }
-
-  public function getValorPrincipal() {
-
-    return $this->nValorPrincipal;
-  }
-
-  public function setValorPrincipal($nValorPrincipal) {
-
-    $this->nValorPrincipal = $nValorPrincipal;
-  }
-
-  public function getValorMulta() {
-
-    return $this->nValorMulta;
-  }
-
-  public function setValorMulta($nValorMulta) {
-
-    $this->nValorMulta = $nValorMulta;
-  }
-
-  public function getJurosEncargos() {
-
-    return $this->nJurosEncargos;
-  }
-
-  public function setJurosEncargos($nJurosEncargos) {
-
-    $this->nJurosEncargos = $nJurosEncargos;
-  }
-
-
-  public function getOrgao() {
-      return $this->sOrgao;
-  }
-
-  public function setOrgao($sOrgao) {
-      $this->sOrgao = $sOrgao;
-  }
-
-  public function getUnidade() {
-      return $this->iUnidade;
-  }
-
-  public function setUnidade($iUnidade) {
-      $this->iUnidade = $iUnidade;
-  }
-
-  public function getComFatura() {
-    return $this->iComFatura;
-  }
-
-  public function setComFatura($iComFatura) {
-    $this->iComFatura = $iComFatura;
-  }
-
-  public function setSlipVinculo($iSlipVinculo) {
-    $this->iSlipVinculo = $iSlipVinculo;
-  }
-
-  public function getSlipVinculo() {
-    return $this->iSlipVinculo;
-  }
-        
   /* [Fim plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte2] */
 
   public function getCodigoBarra() {
@@ -941,22 +667,8 @@ class MovimentoArquivoTransmissao {
     return $this;
   }
 
-  /**
-   * @return date
-   */
-  public function getDtPagamento() {
-    return $this->dtPagamento;
-  }
-  
-  /**
-   * @param date $dtPagamento
-   * @return self
-   */
-  public function setDtPagamento($dtPagamento) {
-
-    $this->dtPagamento = $dtPagamento;
-    return $this;
-  }
+  /* Plugin ArquivoOBNGRU - Parte 4 */
+  /* Fim Plugin ArquivoOBNGRU - Parte 4 */
 
   /**
    * Constrói um objeto do tipo MovimentoArquivoTransmissao de acordo com codigo e ano
@@ -988,11 +700,6 @@ class MovimentoArquivoTransmissao {
     $oDadosLinha->setCodigoBarra($oStdResultadoQuery->e74_codigodebarra);
 
     /* [Inicio plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte3] */
-    $oDadosLinha->setOrgao($oStdResultadoQuery->orgao);
-    $oDadosLinha->setUnidade($oStdResultadoQuery->unidade);
-    $oDadosLinha->setComFatura($oStdResultadoQuery->comfatura);
-    $oDadosLinha->setSlipVinculo($oStdResultadoQuery->slipvinculo);
-        
     /* [Fim plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte3] */
 
     $oDadosLinha->setValorNominal($oStdResultadoQuery->e74_valornominal);
@@ -1005,22 +712,9 @@ class MovimentoArquivoTransmissao {
     $oDadosLinha->setCodigoMovimento($oStdResultadoQuery->e81_codmov);
     $oDadosLinha->setDataGeracao($oStdResultadoQuery->e87_data);
     $oDadosLinha->setDataProcessamento($oStdResultadoQuery->e87_dataproc);
-
-    $oDadosLinha->setTipoPagamento($oStdResultadoQuery->tipopagamento);
-    $oDadosLinha->setCodReceita($oStdResultadoQuery->codreceita);
-    $oDadosLinha->setCodIdentificacao($oStdResultadoQuery->codidentificacao);
-    $oDadosLinha->setPeriodoApuracao($oStdResultadoQuery->periodoapuracao);
-    $oDadosLinha->setDataVencimento($oStdResultadoQuery->datavencimento);
-    $oDadosLinha->setMesAnoCompetencia($oStdResultadoQuery->mesanocompetencia);
-    $oDadosLinha->setNumReferencia($oStdResultadoQuery->numreferencia);
-    $oDadosLinha->setValorINSS($oStdResultadoQuery->valorinss);
-    $oDadosLinha->setValorOutras($oStdResultadoQuery->valoroutras);
-    $oDadosLinha->setAtualizacaoMonetaria($oStdResultadoQuery->atualizacaomonetaria);
-    $oDadosLinha->setValorReceitaBruta($oStdResultadoQuery->valorreceitabruta);
-    $oDadosLinha->setPercentualReceita($oStdResultadoQuery->percentualreceita);
-    $oDadosLinha->setValorPrincipal($oStdResultadoQuery->valorprincipal);
-    $oDadosLinha->setValorMulta($oStdResultadoQuery->valormulta);
-    $oDadosLinha->setJurosEncargos($oStdResultadoQuery->jurosencargos);
+    
+    /* Plugin ArquivoOBNGRU - Parte 5 */
+    /* Fim Plugin ArquivoOBNGRU - Parte 5 */
 
     $oDadosLinha->setCodigoBancoPagador($oStdResultadoQuery->c63_banco);
     $oDadosLinha->setCodigoAgenciaPagadora($oStdResultadoQuery->c63_agencia);
@@ -1073,17 +767,6 @@ class MovimentoArquivoTransmissao {
   public static function getSqlDadosMovimentacao($sCodigoGeracao, $iInstituicao, $iAno, $iCodigoMovimento = null) {
 
     /* [Inicio plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte4] */
-         $oDaoPluginGeracaoArquivoOBN = db_utils::getDao("PluginGeracaoArquivoOBN");
-         return $oDaoPluginGeracaoArquivoOBN->getSqlDadosMovimentacao($sCodigoGeracao, $iInstituicao, $iAno, $iCodigoMovimento);
-         
-         /*****
-          *
-          * Atencao:
-          * Codigo abaixo nao eh utilizado quando o plugin esta ativo!
-          * Para ver o sql ou mesmo aterar, deve ser visto o arquivo classes/db_PluginGeracaoArquivoOBN_classe.php
-          *
-          */
-        
     /* [Fim plugin GeracaoArquivoOBN  - processamento arquivo OBN - parte4] */
 
     $sWhere         = "1=1";

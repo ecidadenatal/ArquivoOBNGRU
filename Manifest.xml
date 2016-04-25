@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <plugin name="ArquivoOBNGRU" label="Arquivo OBN GRU" plugin-version="1.0" ecidade-version="2.3.47" id-modulo="39">
+   <id id="ArquivoOBNGRU"> </id>
+   <files>    
+      <!-- rpc -->
+      <file name="emp4_configuracaoarquivoenvio_natal.RPC.php"    path="/emp4_configuracaoarquivoenvio_natal.RPC.php" />
+
+      <!-- tela -->
+      <file name="emp4_configuracaoarquivoenvio001_natal.php"    path="/emp4_configuracaoarquivoenvio001_natal.php" />
+
+      <!-- classe -->
+      <file name="db_empagemovdetalhetransmissaoautenticacao_classe.php"    path="/classes/db_empagemovdetalhetransmissaoautenticacao_classe.php" />
+      <file name="db_empagemovpagamentoautenticacao_classe.php"    path="/classes/db_empagemovpagamentoautenticacao_classe.php" />
+      <file name="db_empagemovpagamento_classe.php"    path="/classes/db_empagemovpagamento_classe.php" />
+
+      <!-- dd -->
+      <file name="plugins.empagemovdetalhetransmissaoautenticacao.dd.xml"    path="/dd/tabelas/plugins.empagemovdetalhetransmissaoautenticacao.dd.xml" />
+      <file name="plugins.empagemovpagamento.dd.xml"    path="/dd/tabelas/plugins.empagemovpagamento.dd.xml" />
+      <file name="plugins.empagemovpagamentoautenticacao.dd.xml"    path="/dd/tabelas/plugins.empagemovpagamentoautenticacao.dd.xml" />
+      <file name="plugins.tipopagamento.dd.xml"    path="/dd/tabelas/plugins.tipopagamento.dd.xml" />
+
+   </files>
+
+   <estrutura install="/instalacao.sql" uninstall="/desinstalacao.sql">
+   </estrutura>
+
+  </plugin>
+</manifest>    

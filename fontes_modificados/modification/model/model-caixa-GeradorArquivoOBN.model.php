@@ -128,7 +128,7 @@ class GeradorArquivoOBN {
    * @return integer $iCodigoRemessa
    */
   public function getCodigoRemessa() {
-    return $this->iCodigoRemessa;
+  	return $this->iCodigoRemessa;
   }
 
   /**
@@ -137,7 +137,7 @@ class GeradorArquivoOBN {
    */
   public function setCodigoRemessa($iCodigoRemessa){
 
-    $this->iCodigoRemessa = $iCodigoRemessa;
+  	$this->iCodigoRemessa = $iCodigoRemessa;
   }
 
   /**
@@ -230,8 +230,8 @@ class GeradorArquivoOBN {
     $this->salvarGeracaoArquivo();
     $this->vincularMovimentosNaGeracao($aMovimentosAgenda);
     $this->geraArquivoEnvio($aMovimentosAgenda);
-    $this->vincularRemessaNumeracao();
-    $this->setCodigoSequencialArquivo();
+  	$this->vincularRemessaNumeracao();
+  	$this->setCodigoSequencialArquivo();
   }
 
 
@@ -242,21 +242,21 @@ class GeradorArquivoOBN {
    */
   public function regerarArquivo() {
 
-    if (empty($this->oInstituicao)) {
-      throw new BusinessException("ERRO [ 0 ] - Gerando arquivo - Não foi encontrada instituição.");
-    }
+  	if (empty($this->oInstituicao)) {
+  		throw new BusinessException("ERRO [ 0 ] - Gerando arquivo - Não foi encontrada instituição.");
+  	}
 
-    if (empty($this->iAno)) {
-      throw new BusinessException("ERRO [ 1 ] - Gerando arquivo - Não foi encontrado o ano da seção.");
-    }
+  	if (empty($this->iAno)) {
+  		throw new BusinessException("ERRO [ 1 ] - Gerando arquivo - Não foi encontrado o ano da seção.");
+  	}
 
-    if (empty($this->iCodigoRemessa)) {
-      throw new BusinessException("ERRO [ 2 ] - Gerando arquivo - Não foi encontrado código da remessa.");
-    }
-    $this->iSequencialArquivo = $this->buscaCodigoArquivoRemessa();
-    $this->salvarGeracaoArquivo();
-    $this->buscaCodigoArquivoRemessa();
-    $this->geraArquivoEnvio();
+  	if (empty($this->iCodigoRemessa)) {
+  		throw new BusinessException("ERRO [ 2 ] - Gerando arquivo - Não foi encontrado código da remessa.");
+  	}
+		$this->iSequencialArquivo = $this->buscaCodigoArquivoRemessa();
+  	$this->salvarGeracaoArquivo();
+  	$this->buscaCodigoArquivoRemessa();
+  	$this->geraArquivoEnvio();
   }
 
   /**
@@ -267,7 +267,6 @@ class GeradorArquivoOBN {
 
     $dtNomeArquivo              = str_replace("-", "_", $this->dtGeracaoArquivo);
     $this->sLocalizacaoArquivo  = "tmp/arquivo_{$this->iCodigoRemessa}_{$dtNomeArquivo}.txt";
-
     $iInstituicao               = $this->oInstituicao->getSequencial();
     $iAno                       = $this->iAno;
     $iRemessa                   = $this->iCodigoRemessa;
@@ -298,6 +297,7 @@ class GeradorArquivoOBN {
      * do tipo MovimentoArquivoTransmissao, para não precisar refazer o SQL "MovimentoArquivoTransmissao::getSqlDadosMovimentacao"
      */
     for ($iDadoMovimento = 0; $iDadoMovimento < $iTotalMovimentos; $iDadoMovimento++ ) {
+
       $this->iSequencialRegistro++;
       $oStdMovimento   = db_utils::fieldsMemory($rsBuscaDadosGeracaoArquivo, $iDadoMovimento);
       $oDadosMovimento = MovimentoArquivoTransmissao::montaObjetoLinha($oStdMovimento);
@@ -352,7 +352,7 @@ class GeradorArquivoOBN {
         
       /* [Fim plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte5] */
           $this->iSequencialRegistro++;
-
+      /* Plugin ArquivoOBNGRU - Parte1 */
           $oDaoDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
           $sSqlDetalheTransmissao = $oDaoDetalheTransmissao->sql_query_file (null, "*", null, "e74_empagemov = {$oDadosMovimento->getCodigoMovimento()}");
           $rsDetalheTransmissao   = $oDaoDetalheTransmissao->sql_record($sSqlDetalheTransmissao);
@@ -370,7 +370,6 @@ class GeradorArquivoOBN {
             }
 
           }
-          //ACRESCENTA UM PARÂMETRO QUE VAI SER O OBJETO DOS DETALHES DA FATURA (FAZ O MSM NA LINHA 5)
           $aCodigoSequenciais[] = $this->iContadorRegistros;
           break;
 
@@ -699,13 +698,14 @@ class GeradorArquivoOBN {
    * @param  MovimentoArquivoTransmissao $oDadosLinha
    * @return stdClass
    */
+  /* Plugin ArquivoOBNGRU - Parte3 */
   private function constroiLinhaTipoQuatro(MovimentoArquivoTransmissao $oDadosLinha, $oDadosDetalheTransmissao) {
-
 
     $oStdLinhaTipoQuatro       = new stdClass();
     $iTipoFavorecido           = ConfiguracaoArquivoObn::verificaTipoFavorecido(strlen($oDadosLinha->getCnpj()));
     $iTipoOperacao             = ConfiguracaoArquivoObn::verificarTipoOperacao($oDadosLinha);
     list($iAno, $iMes, $iDia) = explode("-", $this->dtGeracaoArquivo);
+    /* Plugin ArquivoOBNGRU - Parte4 */
     list($iAnoCodigoBarra, $iMesCodigoBarra, $iDiaCodigoBarra) = explode("-", $oDadosDetalheTransmissao->e74_datavencimento);
 
     $sAgenciaDigitoPagadora = $oDadosLinha->getCodigoAgenciaPagadora().$oDadosLinha->getDigitoVerificadorAgenciaPagadora();
@@ -738,24 +738,20 @@ class GeradorArquivoOBN {
     $oStdLinhaTipoQuatro->valor_liquido                    = str_pad(str_replace(".", "", $oDadosLinha->getValor()), 17, "0", STR_PAD_LEFT);
     $oStdLinhaTipoQuatro->campo_branco_quatro              = str_repeat(" ", 15);
 
-    /* [Inicio plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte16] */    
-    /*if ($oDadosLinha->getTipoFatura() == 2) {
-      $oDadosLinha->setTipoFatura(1);
-    } else {
-       $oDadosLinha->setTipoFatura(2);
-    }*/
-    /* [Fim plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte16] */
-
+    /* Plugin ArquivoOBNGRU - Parte5 */
     $oStdLinhaTipoQuatro->tipo_fatura                      = $oDadosDetalheTransmissao->e74_tipofatura;
     $oStdLinhaTipoQuatro->codigo_barra                     = $oDadosDetalheTransmissao->e74_codigodebarra;
+    /* Fim Plugin ArquivoOBNGRU - Parte5 */
     $oStdLinhaTipoQuatro->cb_data_vencimento               = "{$iDiaCodigoBarra}{$iMesCodigoBarra}{$iAnoCodigoBarra}";
+    /* Plugin ArquivoOBNGRU - Parte6 */
     $oStdLinhaTipoQuatro->cb_valor_nominal                 = str_pad(str_replace(".", "", $oDadosDetalheTransmissao->e74_valornominal), 17, "0", STR_PAD_LEFT);
     $oStdLinhaTipoQuatro->cb_valor_desconto_abatimento     = str_pad(str_replace(".", "",  $oDadosDetalheTransmissao->e74_valordesconto), 17, "0", STR_PAD_LEFT);
     $oStdLinhaTipoQuatro->cb_valor_mora_juros              = str_pad(str_replace(".", "", $oDadosDetalheTransmissao->e74_valorjuros), 17, "0", STR_PAD_LEFT);
+    /* Fim Plugin ArquivoOBNGRU - Parte6 */
 
-    /* [Inicio plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte17] */
+    /* Plugin ArquivoOBNGRU - Parte7 */
     if ($oDadosDetalheTransmissao->e74_tipofatura == 2) {
-    /* [Fim plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte17] */
+    /* Fim Plugin ArquivoOBNGRU - Parte7 */
 
       $oStdLinhaTipoQuatro->cb_data_vencimento             = str_repeat(" ", 20);
       $oStdLinhaTipoQuatro->cb_valor_nominal               = str_repeat(" ", 20);
@@ -916,6 +912,7 @@ class GeradorArquivoOBN {
     $oStdLinhaTrailer                                = new stdClass();
     $oStdLinhaTrailer->campo_nove                    = str_repeat("9", 35);
     $oStdLinhaTrailer->campo_branco                  = str_repeat(" ", 320);
+    /* Plugin ArquivoOBNGRU - Parte9 */
     $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(".", "", number_format((float)$this->nValorTotalDasMovimentacoes, 2)), 17, "0", STR_PAD_LEFT);
     $oStdLinhaTrailer->somatorio_sequencia_registros = str_pad($this->iContadorRegistros, 13, "0", STR_PAD_LEFT);
     return $oStdLinhaTrailer;
