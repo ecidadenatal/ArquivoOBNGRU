@@ -154,7 +154,7 @@ exit;]]>
 
   </file>
   
-  <file path='model/caixa/GeradorArquivoObn.model.php'>
+  <file path='model/caixa/GeradorArquivoOBN.model.php'>
     <operation>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte1 */
           $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento);
@@ -494,39 +494,9 @@ exit;]]>
     </operation>
 
     <operation>
-      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 2 */]]></search>
-      <add position="after">
-        <![CDATA[
-  /**
-   * Orgao
-   * @var Integer
-   */
-  private $sOrgao;
-  
-  /**
-   * Unidade 
-   * @var Integer
-   */
-  private $iUnidade;  
-  
-  /**
-   * Codigo com ou sem fatura (f - Não, t - Sim)
-   * @var integer
-   */
-  private $iComFatura;
-        ]]>
-      </add>
-    </operation>
-
-    <operation>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 3 */]]></search>
       <add position="after">
-        <![CDATA[  /**
-   * Slip Vinculo 
-   * @var integer
-   */
-  private $iSlipVinculo;
-
+        <![CDATA[
   /**
    * Data do Pagamento
    * @var date
@@ -672,39 +642,6 @@ exit;]]>
   public function setJurosEncargos($nJurosEncargos) {
 
     $this->nJurosEncargos = $nJurosEncargos;
-  }
-
-
-  public function getOrgao() {
-      return $this->sOrgao;
-  }
-
-  public function setOrgao($sOrgao) {
-      $this->sOrgao = $sOrgao;
-  }
-
-  public function getUnidade() {
-      return $this->iUnidade;
-  }
-
-  public function setUnidade($iUnidade) {
-      $this->iUnidade = $iUnidade;
-  }
-
-  public function getComFatura() {
-    return $this->iComFatura;
-  }
-
-  public function setComFatura($iComFatura) {
-    $this->iComFatura = $iComFatura;
-  }
-
-  public function setSlipVinculo($iSlipVinculo) {
-    $this->iSlipVinculo = $iSlipVinculo;
-  }
-
-  public function getSlipVinculo() {
-    return $this->iSlipVinculo;
   }
         ]]>
       </add>
