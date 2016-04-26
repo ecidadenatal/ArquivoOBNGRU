@@ -2,7 +2,7 @@
 <modification>
   <name>ArquivoOBNGRU</name>
   <id>ArquivoOBNGRU</id>
-  <ecidade-version>2.3.39</ecidade-version>
+  <ecidade-version>2.3.47</ecidade-version>
   
   <file path='model/caixa/arquivos/PagamentoFornecedorBancoDoBrasilOBN.model.php'>
     <operation>
@@ -728,8 +728,8 @@
         <![CDATA[
     /* 
      * Os setters abaixo, assim como os da linha 4, não estão sendo utilizados no momento,
-     * em razão das funções que foram modificadas no model GeradorArquivoObn para receberem um parametro com os dados do empagemovdetalhetransmissao
-     * e plugins.empagemovpagamento
+     * em razão das funções geradoras das linhas 4 e 5 que foram modificadas no model GeradorArquivoObn 
+     * para receberem um parametro com os dados do empagemovdetalhetransmissao (fatura/convênio) e plugins.empagemovpagamento (GRU)
      */
 
     $oDadosLinha->setTipoPagamento($oStdResultadoQuery->tipopagamento);

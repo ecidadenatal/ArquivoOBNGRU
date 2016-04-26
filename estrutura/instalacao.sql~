@@ -8,7 +8,7 @@ insert into plugins.tipopagamento values (nextval('plugins.tipopagamento_sequenc
 insert into plugins.tipopagamento values (nextval('plugins.tipopagamento_sequencial_seq'), 3, 'DARF Simples');
 
 create table plugins.empagemovpagamento (sequencial integer, 
-                                                     empagemov integer not null, 
+                                                     empagemov integer not null references empagemov(e81_codmov), 
                                                      tipopagamento integer not null,
                                                      codreceita varchar(6),
 													 codidentificacao varchar(2),   

@@ -2,8 +2,19 @@
 <modification>
   <name>ArquivoOBNGRU</name>
   <id>ArquivoOBNGRU</id>
-  <ecidade-version>2.3.39</ecidade-version>
-  
+  <ecidade-version>2.3.47</ecidade-version>
+
+  <file path='emp4_configuracaoarquivoenvio001.php'>
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU */]]></search>
+      <add position="after">
+        <![CDATA[
+require_once("emp4_configuracaoarquivoenvio001_natal.php");
+exit;]]>
+      </add>
+    </operation>
+  </file>
+ 
   <file path='model/caixa/arquivos/PagamentoFornecedorBancoDoBrasilOBN.model.php'>
     <operation>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 1 */]]></search>
@@ -750,11 +761,5 @@
       </add>
     </operation>
 
-    <operation>
-      <search><![CDATA[]]></search>
-      <add position="after">
-        <![CDATA[]]>
-      </add>
-    </operation>
   </file>
 </modification>

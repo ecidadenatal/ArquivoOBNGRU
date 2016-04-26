@@ -20,6 +20,9 @@
       <file name="plugins.empagemovpagamentoautenticacao.dd.xml"    path="/dd/tabelas/plugins.empagemovpagamentoautenticacao.dd.xml" />
       <file name="plugins.tipopagamento.dd.xml"    path="/dd/tabelas/plugins.tipopagamento.dd.xml" />
 
+      <!-- outro -->
+      <file name="ArquivoOBNGRU.xml"    path="/modification/xml/ArquivoOBNGRU.xml" />
+
    </files>
 
    <estrutura install="/instalacao.sql" uninstall="/desinstalacao.sql">

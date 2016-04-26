@@ -28,7 +28,7 @@
 require_once(modification("libs/db_stdlib.php"));
 require_once(modification("libs/db_utils.php"));
 require_once(modification("libs/db_app.utils.php"));
-require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_conecta_plugin.php"));
 require_once(modification("libs/db_sessoes.php"));
 require_once(modification("libs/JSON.php"));
 require_once(modification("libs/exceptions/BusinessException.php"));
