@@ -166,17 +166,19 @@ exit;]]>
           $oDaoDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
           $sSqlDetalheTransmissao = $oDaoDetalheTransmissao->sql_query_file (null, "*", null, "e74_empagemov = {$oDadosMovimento->getCodigoMovimento()}");
           $rsDetalheTransmissao   = $oDaoDetalheTransmissao->sql_record($sSqlDetalheTransmissao);
+          $iDetalheFatura      = 1;
           
           if ($oDaoDetalheTransmissao->numrows > 0) {
 
             for ($iDetalheTransmissao=0; $iDetalheTransmissao < $oDaoDetalheTransmissao->numrows; $iDetalheTransmissao++) { 
               
+              $this->iContadorRegistros++;
               $oDadosDetalheTransmissao = db_utils::fieldsMemory($rsDetalheTransmissao, $iDetalheTransmissao);
               
-              $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento, $oDadosDetalheTransmissao);
+              $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento, $oDadosDetalheTransmissao, $iDetalheFatura);
+              $iDetalheFatura++;
               $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 4);
               
-              $this->iContadorRegistros++;
             }
 
           }]]>
@@ -197,17 +199,19 @@ exit;]]>
           $oDaoEmpAgeMovPagamento = db_utils::getDao('empagemovpagamento');
           $sSqlEmpAgeMovPagamento = $oDaoEmpAgeMovPagamento->sql_query_empagemov("*", "", "empagemov = {$oDadosMovimento->getCodigoMovimento()}");
           $rsEmpAgeMovPagamento   = $oDaoEmpAgeMovPagamento->sql_record($sSqlEmpAgeMovPagamento);
+          $iDetalhePagamento      = 1;
 
           if ($oDaoEmpAgeMovPagamento->numrows > 0) {
 
             for ($iPagamento = 0; $iPagamento < $oDaoEmpAgeMovPagamento->numrows; $iPagamento++) { 
               
+              $this->iContadorRegistros++;
               $oDadosPagamento = db_utils::fieldsMemory($rsEmpAgeMovPagamento, $iPagamento);
 
-              $oLinha = $this->constroiLinhaTipoCinco($oDadosMovimento, $oDadosPagamento);
+              $oLinha = $this->constroiLinhaTipoCinco($oDadosMovimento, $oDadosPagamento, $iDetalhePagamento);
+              $iDetalhePagamento++;
               $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 5);
               
-              $this->iContadorRegistros++;
             }
 
           }
@@ -222,7 +226,7 @@ exit;]]>
   private function constroiLinhaTipoQuatro(MovimentoArquivoTransmissao $oDadosLinha) {]]></search>
       <add position="replace">
         <![CDATA[/* Plugin ArquivoOBNGRU - Parte3 */
-  private function constroiLinhaTipoQuatro(MovimentoArquivoTransmissao $oDadosLinha, $oDadosDetalheTransmissao) {]]>
+  private function constroiLinhaTipoQuatro(MovimentoArquivoTransmissao $oDadosLinha, $oDadosDetalheTransmissao, $iDetalheFatura) {]]>
       </add>
     </operation>
 
@@ -272,8 +276,7 @@ exit;]]>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte8 */]]></search>
       <add position="after">
         <![CDATA[
-  private function constroiLinhaTipoCinco(MovimentoArquivoTransmissao $oDadosLinha, $oDadosPagamento) {
-
+  private function constroiLinhaTipoCinco(MovimentoArquivoTransmissao $oDadosLinha, $oDadosPagamento, $iDetalhePagamento) {
 
     $oStdLinhaTipoCinco       = new stdClass();
     $iTipoFavorecido          = ConfiguracaoArquivoObn::verificaTipoFavorecido(strlen($oDadosLinha->getCnpj()));
@@ -303,7 +306,7 @@ exit;]]>
     $oStdLinhaTipoCinco->codigo_operacao                  = $iTipoOperacao;
     $oStdLinhaTipoCinco->campo_branco_dois                = str_repeat(" ", 1);
 
-    $oStdLinhaTipoCinco->campo_zero_um                    = "000001";
+    $oStdLinhaTipoCinco->campo_zero_um                    = str_pad($iDetalhePagamento, 6, "0", STR_PAD_LEFT);
     
     $oStdLinhaTipoCinco->campo_branco_tres                = str_repeat(" ", 3);
     $oStdLinhaTipoCinco->valor_liquido                    = str_pad(str_replace(".", "", $oDadosLinha->getValor()), 17, "0", STR_PAD_LEFT);
@@ -405,6 +408,16 @@ exit;]]>
     $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(".", "", number_format((float)$this->nValorTotalDasMovimentacoes, 2)), 17, "0", STR_PAD_LEFT);]]>
       </add>
     </operation>
+
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte10 */
+    $oStdLinhaTipoQuatro->campo_zero_um = str_repeat("0", 6);]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte10 */
+    $oStdLinhaTipoQuatro->campo_zero_um = str_pad($iDetalheFatura, 6, "0", STR_PAD_LEFT);]]>
+      </add>
+    </operation>
+
   </file>
 
   

@@ -342,33 +342,36 @@ function js_tipoFatura(iTipoFatura){
     case "1" :
 
       $("iTipoFatura").options.length = 0;
-      $("iTipoFatura").options[0]     = new Option("Fatura"      , "1");
-      $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
-      $("iTipoFatura").options[2]     = new Option("GPS"         , "3");
-      $("iTipoFatura").options[3]     = new Option("DARF"        , "4");
-      $("iTipoFatura").options[4]     = new Option("DARF Simples", "5");
+      $("iTipoFatura").options[0]     = new Option("Selecione"   , "0");
+      $("iTipoFatura").options[1]     = new Option("Fatura"      , "1");
+      $("iTipoFatura").options[2]     = new Option("Convênio"    , "2");
+      $("iTipoFatura").options[3]     = new Option("GPS"         , "3");
+      $("iTipoFatura").options[4]     = new Option("DARF"        , "4");
+      $("iTipoFatura").options[5]     = new Option("DARF Simples", "5");
 
     break;
 
     case "2" :
 
       $("iTipoFatura").options.length = 0;
-      $("iTipoFatura").options[0]     = new Option("Convênio"    , "2");
-      $("iTipoFatura").options[1]     = new Option("Fatura"      , "1");
-      $("iTipoFatura").options[2]     = new Option("GPS"         , "3");
-      $("iTipoFatura").options[3]     = new Option("DARF"        , "4");
-      $("iTipoFatura").options[4]     = new Option("DARF Simples", "5");
+      $("iTipoFatura").options[0]     = new Option("Selecione"   , "0");
+      $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
+      $("iTipoFatura").options[2]     = new Option("Fatura"      , "1");
+      $("iTipoFatura").options[3]     = new Option("GPS"         , "3");
+      $("iTipoFatura").options[4]     = new Option("DARF"        , "4");
+      $("iTipoFatura").options[5]     = new Option("DARF Simples", "5");
 
     break;
 
     default :
 
       $("iTipoFatura").options.length = 0;
-      $("iTipoFatura").options[0]     = new Option("Fatura"      , "1");
-      $("iTipoFatura").options[1]     = new Option("Convênio"    , "2");
-      $("iTipoFatura").options[2]     = new Option("GPS"         , "3");
-      $("iTipoFatura").options[3]     = new Option("DARF"        , "4");
-      $("iTipoFatura").options[4]     = new Option("DARF Simples", "5");
+      $("iTipoFatura").options[0]     = new Option("Selecione"   , "0");
+      $("iTipoFatura").options[1]     = new Option("Fatura"      , "1");
+      $("iTipoFatura").options[2]     = new Option("Convênio"    , "2");
+      $("iTipoFatura").options[3]     = new Option("GPS"         , "3");
+      $("iTipoFatura").options[4]     = new Option("DARF"        , "4");
+      $("iTipoFatura").options[5]     = new Option("DARF Simples", "5");
     break;
 
   }
@@ -1235,13 +1238,12 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "        <td align='left'>   ";
       sConteudoDetalhes += "           <select id='iTipoFatura' name='iTipoFatura' onChange='js_camposTipoFatura(this.value)' style='width:100px;' >";
+      sConteudoDetalhes += "             <option value='0'>Selecione</option>           ";
       sConteudoDetalhes += "             <option value='1'>Fatura</option>           ";
       sConteudoDetalhes += "             <option value='2'>Convênio</option>         ";
-
       sConteudoDetalhes += "             <option value='3'>GPS</option>         ";
       sConteudoDetalhes += "             <option value='4'>DARF</option>         ";
       sConteudoDetalhes += "             <option value='5'>DARF Simples</option>         ";
-
       sConteudoDetalhes += "           </select>";
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
@@ -1400,7 +1402,7 @@ function js_viewConfiguracao (iCodMov) {
       sConteudoDetalhes += "        </td>  ";
       sConteudoDetalhes += "      </tr>    ";
 
-      sConteudoDetalhes += "      <tr nowrap>     ";
+      sConteudoDetalhes += "      <tr nowrap id='trFaturaAnexo'>     ";
       sConteudoDetalhes += "        <td >   ";
       sConteudoDetalhes += "         <strong> Com Fatura Anexo? </strong>  ";
       sConteudoDetalhes += "        </td>  ";
@@ -1512,7 +1514,7 @@ function js_viewConfiguracao (iCodMov) {
   oTxtJuros      .show($('ctnJuros'));
   oTxtDesconto   .show($('ctnDesconto'));
 
-  js_camposTipoFatura('1');
+  js_camposTipoFatura('0');
 }
 
 function js_camposTipoFatura(tipoFatura){
@@ -1534,8 +1536,31 @@ function js_camposTipoFatura(tipoFatura){
   $('trJurosEncargos').style.display        = 'none';
   $('trPeriodoApuracao').style.display      = 'none';
   $('trNumReferencia').style.display        = 'none';
-
+  $('trFaturaAnexo').style.display          = 'none';
+  
   switch(tipoFatura) {
+
+    case '0':
+      $('trCodRecIdent').style.display          = 'none';
+      $('trMesAnoCompetencia').style.display    = 'none';
+      $('trValor').style.display                = 'none';
+      $('linhadigitavel').style.display         = 'none';
+      $('codigodebarras').style.display         = 'none';
+      $('trJuros').style.display                = 'none';
+      $('trDesconto').style.display             = 'none';
+      $('trData').style.display                 = 'none';
+      $('trValorINSS').style.display            = 'none';
+      $('trValorOutras').style.display          = 'none';
+      $('trAtualizacaoMonetaria').style.display = 'none';
+      $('trReceitaBruta').style.display         = 'none';
+      $('trValorMulta').style.display           = 'none';
+      $('trPercentualReceita').style.display    = 'none';
+      $('trJurosEncargos').style.display        = 'none';
+      $('trPeriodoApuracao').style.display      = 'none';
+      $('trNumReferencia').style.display        = 'none';
+      $('trFaturaAnexo').style.display          = 'table-row';
+    break;
+
     case '1':
     case '2':
 

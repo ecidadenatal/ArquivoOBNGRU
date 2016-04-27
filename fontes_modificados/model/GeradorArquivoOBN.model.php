@@ -560,9 +560,9 @@ class GeradorArquivoOBN {
     $oStdLinhaTipoQuatro->codigo_operacao                  = $iTipoOperacao;
     $oStdLinhaTipoQuatro->campo_branco_dois                = str_repeat(" ", 1);
 
-    /* [Inicio plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte15] */
+    /* Plugin ArquivoOBNGRU - Parte10 */
     $oStdLinhaTipoQuatro->campo_zero_um = str_repeat("0", 6);
-    /* [Fim plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte15] */
+    /* Fim Plugin ArquivoOBNGRU - Parte10 */
 
     $oStdLinhaTipoQuatro->campo_branco_tres                = str_repeat(" ", 3);
     $oStdLinhaTipoQuatro->valor_liquido                    = str_pad(str_replace(".", "", $oDadosLinha->getValor()), 17, "0", STR_PAD_LEFT);
