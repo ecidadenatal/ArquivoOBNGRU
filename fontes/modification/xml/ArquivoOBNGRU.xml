@@ -418,6 +418,15 @@ exit;]]>
       </add>
     </operation>
 
+    <operation>
+      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte11 */
+    $oStdLinhaTipoQuatro->valor_liquido                    = str_pad(str_replace(".", "", $oDadosLinha->getValor()), 17, "0", STR_PAD_LEFT);]]></search>
+      <add position="replace">
+        <![CDATA[/* Plugin ArquivoOBNGRU - Parte11 */
+    $oStdLinhaTipoQuatro->valor_liquido                    = str_pad(str_replace(".", "", $oDadosDetalheTransmissao->e74_valornominal), 17, "0", STR_PAD_LEFT);]]>
+      </add>
+    </operation>
+
   </file>
 
   

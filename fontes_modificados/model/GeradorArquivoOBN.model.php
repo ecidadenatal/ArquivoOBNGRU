@@ -565,7 +565,9 @@ class GeradorArquivoOBN {
     /* Fim Plugin ArquivoOBNGRU - Parte10 */
 
     $oStdLinhaTipoQuatro->campo_branco_tres                = str_repeat(" ", 3);
+    /* Plugin ArquivoOBNGRU - Parte11 */
     $oStdLinhaTipoQuatro->valor_liquido                    = str_pad(str_replace(".", "", $oDadosLinha->getValor()), 17, "0", STR_PAD_LEFT);
+    /* Fim Plugin ArquivoOBNGRU - Parte11 */
     $oStdLinhaTipoQuatro->campo_branco_quatro              = str_repeat(" ", 15);
 
     /* Plugin ArquivoOBNGRU - Parte5 */
