@@ -322,8 +322,8 @@ class GeradorArquivoOBN {
 
       /* [Inicio plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte5] */
       /* [Fim plugin GeracaoArquivoOBN  - Geracao Arquivo OBN - parte5] */
-          $this->iSequencialRegistro++;
       /* Plugin ArquivoOBNGRU - Parte1 */
+          $this->iSequencialRegistro++;
           $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento);
           $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 4);
           

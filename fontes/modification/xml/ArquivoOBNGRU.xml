@@ -157,10 +157,12 @@ exit;]]>
   <file path='model/caixa/GeradorArquivoOBN.model.php'>
     <operation>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte1 */
+          $this->iSequencialRegistro++;
           $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento);
           $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 4);
           
-          $this->iContadorRegistros++;]]></search>
+          $this->iContadorRegistros++;
+          $aCodigoSequenciais[] = $this->iContadorRegistros;]]></search>
       <add position="replace">
         <![CDATA[/* Plugin ArquivoOBNGRU - Parte1 */
           $oDaoDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
@@ -172,15 +174,16 @@ exit;]]>
 
             for ($iDetalheTransmissao=0; $iDetalheTransmissao < $oDaoDetalheTransmissao->numrows; $iDetalheTransmissao++) { 
               
-              $this->iContadorRegistros++;
               $oDadosDetalheTransmissao = db_utils::fieldsMemory($rsDetalheTransmissao, $iDetalheTransmissao);
               
+              $this->iSequencialRegistro++;
               $oLinha = $this->constroiLinhaTipoQuatro($oDadosMovimento, $oDadosDetalheTransmissao, $iDetalheFatura);
               $iDetalheFatura++;
               $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 4);
               
+              $this->iContadorRegistros++;
+              $aCodigoSequenciais[] = $this->iContadorRegistros;
             }
-
           }]]>
       </add>
     </operation>
@@ -194,7 +197,7 @@ exit;]]>
           $oLinha          = $this->constroiLinhaTipoDois($oDadosMovimento);
           $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 2);
         
-          $this->iSequencialRegistro++;
+          //$this->iSequencialRegistro++;
 
           $oDaoEmpAgeMovPagamento = db_utils::getDao('empagemovpagamento');
           $sSqlEmpAgeMovPagamento = $oDaoEmpAgeMovPagamento->sql_query_empagemov("*", "", "empagemov = {$oDadosMovimento->getCodigoMovimento()}");
@@ -205,18 +208,19 @@ exit;]]>
 
             for ($iPagamento = 0; $iPagamento < $oDaoEmpAgeMovPagamento->numrows; $iPagamento++) { 
               
-              $this->iContadorRegistros++;
               $oDadosPagamento = db_utils::fieldsMemory($rsEmpAgeMovPagamento, $iPagamento);
 
+              $this->iSequencialRegistro++;
               $oLinha = $this->constroiLinhaTipoCinco($oDadosMovimento, $oDadosPagamento, $iDetalhePagamento);
               $iDetalhePagamento++;
               $oLayoutTXT->setByLineOfDBUtils($oLinha, 3, 5);
-              
+
+              $this->iContadorRegistros++;
+              $aCodigoSequenciais[] = $this->iContadorRegistros;              
             }
 
           }
           
-          $aCodigoSequenciais[] = $this->iContadorRegistros;
       break;]]>
       </add>
     </operation>
