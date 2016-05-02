@@ -409,7 +409,7 @@ exit;]]>
     $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(".", "", number_format($this->nValorTotalDasMovimentacoes, 2, ".", "")), 17, "0", STR_PAD_LEFT);]]></search>
       <add position="replace">
         <![CDATA[/* Plugin ArquivoOBNGRU - Parte9 */
-    $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(".", "", number_format((float)$this->nValorTotalDasMovimentacoes, 2)), 17, "0", STR_PAD_LEFT);]]>
+    $oStdLinhaTrailer->somatorio_valores             = str_pad(str_replace(",", "", str_replace(".", "", number_format((float)$this->nValorTotalDasMovimentacoes, 2))), 17, "0", STR_PAD_LEFT);]]>
       </add>
     </operation>
 
