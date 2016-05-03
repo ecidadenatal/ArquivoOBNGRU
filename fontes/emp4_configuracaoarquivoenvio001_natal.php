@@ -1440,8 +1440,7 @@ function js_viewConfiguracao (iCodMov) {
 
 
      //============  MESAGE BORD PARA TITULO da JANELA
-    var sTextoMessageBoard   = 'Detalhes do movimento a serem enviados no arquivo. Para cancelar a leitura do código de barras, pressione <b>ESC</b>.';
-        sTextoMessageBoard  += '<br />Pressione F6 para ativar leitura do código de barras.';
+    var sTextoMessageBoard   = 'Detalhes do movimento a serem enviados no arquivo.';
         messageBoard         = new DBMessageBoard('msgboard1', 'Características do Movimento.', sTextoMessageBoard, $('sTituloWindow'));
 
       //funcao para corrigir a exibição do window aux, apos fechar a primeira vez
