@@ -750,7 +750,7 @@ function js_salvarDetalhes(iMovimento){
       oDetalhes.nJurosEncargos        = oRow.aCells[19].getValue();
 
       oParametros.aDetalhes.push(oDetalhes);
-      nTotalLancamentos += Number(js_strToFloat(oRow.aCells[2].getValue()));
+      nTotalLancamentos += Number(oRow.aCells[2].getValue());
     });
 
     /**
