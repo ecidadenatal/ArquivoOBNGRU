@@ -20,19 +20,26 @@ exit;]]>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 1 */]]></search>
       <add position="after">
         <![CDATA[
-          $oRegistro->codigo_movimento = trim((int) $oArquivo->codob);
+          $oRegistro = new stdClass();
 
-          $oRegistro->codigo_barras        = $oArquivo->codigobarra;]]>
-      </add>
-    </operation>
+          $oRegistro->numero_autenticacao  = $oArquivo->numeroautenticacao;
+          $oRegistro->retorno_banco        = $oArquivo->codigoretornooperacao;
+          $oRegistro->codigo_retorno       = $this->getCodigoErro( $oArquivo->codigoretornooperacao );
 
-    <operation>
-      <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 2 */]]></search>
-      <add position="after">
-        <![CDATA[
-          $oRegistro->codigo_movimento = trim((int) $oArquivo->codigo_ob);
+          $oDadosRetorno->registros[] = $oRegistro;
+        
+        break;
 
-          $oRegistro->codigo_receita       = $oArquivo->cod_rec_tributo;]]>
+        case '5' :
+
+          $oRegistro = new stdClass();
+
+          $oRegistro->numero_autenticacao  = $oArquivo->numero_autenticacao;
+          $oRegistro->retorno_banco        = $oArquivo->retorno_operacao;
+          $oRegistro->codigo_retorno       = $this->getCodigoErro($oArquivo->retorno_operacao);
+
+          $oDadosRetorno->registros[] = $oRegistro;
+]]>
       </add>
     </operation>
 
