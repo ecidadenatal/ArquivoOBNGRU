@@ -21,7 +21,9 @@ exit;]]>
       <add position="after">
         <![CDATA[
           $oRegistro = new stdClass();
-
+          
+          $oRegistro->codigo_movimento = trim((int) $oArquivo->codob);
+          $oRegistro->codigo_barras        = $oArquivo->codigobarra;
           $oRegistro->numero_autenticacao  = $oArquivo->numeroautenticacao;
           $oRegistro->retorno_banco        = $oArquivo->codigoretornooperacao;
           $oRegistro->codigo_retorno       = $this->getCodigoErro( $oArquivo->codigoretornooperacao );
@@ -34,12 +36,14 @@ exit;]]>
 
           $oRegistro = new stdClass();
 
+          $oRegistro->codigo_movimento = trim((int) $oArquivo->codigo_ob);
+          $oRegistro->codigo_receita       = $oArquivo->cod_rec_tributo;
           $oRegistro->numero_autenticacao  = $oArquivo->numero_autenticacao;
           $oRegistro->retorno_banco        = $oArquivo->retorno_operacao;
           $oRegistro->codigo_retorno       = $this->getCodigoErro($oArquivo->retorno_operacao);
 
           $oDadosRetorno->registros[] = $oRegistro;
-]]>
+        ]]>
       </add>
     </operation>
 
