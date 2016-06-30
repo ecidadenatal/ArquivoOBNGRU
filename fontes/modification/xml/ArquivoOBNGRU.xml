@@ -72,6 +72,9 @@ exit;]]>
         $oAutent->codigo_receita      = $oRegistro->codigo_receita;
         $oAutent->codigo_barras       = $oRegistro->codigo_barras;
         $oAutent->numero_autenticacao = $oRegistro->numero_autenticacao;
+        if (!in_array($oAutent->empagemov, $aMovimentosArquivo)) {
+          $aMovimentosArquivo[]       = $oAutent->empagemov;  
+        }
         $aRetornosPagamento[] = $oAutent;
       } else {
         
