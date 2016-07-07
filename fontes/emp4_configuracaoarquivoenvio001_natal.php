@@ -704,9 +704,9 @@ function js_retornoGetDetalhes(oAjax){
 //================== Persiste os Detalhes no Banco ============//
 
 function js_salvarDetalhes(iMovimento){
-    var nTotalMovimentos = Number(aValoresMovimentos[iMovimento]);
+    var nTotalMovimentos = js_formatar(aValoresMovimentos[iMovimento], 'f');
     var nTotalLancamentos = 0;
-
+alert(nTotalMovimentos);
     var iTipoTransmissao             = $F('iTipoTransmissao');
     //var msgDiv                       = "Salvando Registros <br> Aguarde ...";
     var oParametros                  = new Object();
@@ -750,14 +750,14 @@ function js_salvarDetalhes(iMovimento){
       oDetalhes.nJurosEncargos        = oRow.aCells[19].getValue();
 
       oParametros.aDetalhes.push(oDetalhes);
-      nTotalLancamentos += Number(oRow.aCells[2].getValue());
+      nTotalLancamentos += js_formatar(oRow.aCells[2].getValue(), 'f');
     });
-
+  
     /**
      * Movimento do tipo OBN
      *  - valida valor total lancado, deve ser igual ao do movimento
      */
-    if (iTipoTransmissao == 2 && nTotalLancamentos > 0 && nTotalLancamentos != nTotalMovimentos) {
+    if (iTipoTransmissao == 2 || iTipoTransmissao == 3 && nTotalLancamentos > 0 && nTotalLancamentos != nTotalMovimentos) {
       return alert('Valor total dos lançamentos deve ser igual ao do movimento: ' + js_formatar(nTotalMovimentos, 'f'));
     }
 
