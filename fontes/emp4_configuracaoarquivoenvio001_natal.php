@@ -706,7 +706,7 @@ function js_retornoGetDetalhes(oAjax){
 function js_salvarDetalhes(iMovimento){
     var nTotalMovimentos = js_formatar(aValoresMovimentos[iMovimento], 'f');
     var nTotalLancamentos = 0;
-alert(nTotalMovimentos);
+
     var iTipoTransmissao             = $F('iTipoTransmissao');
     //var msgDiv                       = "Salvando Registros <br> Aguarde ...";
     var oParametros                  = new Object();
@@ -752,7 +752,7 @@ alert(nTotalMovimentos);
       oParametros.aDetalhes.push(oDetalhes);
       nTotalLancamentos += js_formatar(oRow.aCells[2].getValue(), 'f');
     });
-  
+
     /**
      * Movimento do tipo OBN
      *  - valida valor total lancado, deve ser igual ao do movimento
