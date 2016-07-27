@@ -253,7 +253,11 @@ exit;]]>
     list($iAnoCodigoBarra, $iMesCodigoBarra, $iDiaCodigoBarra) = explode("-", $oDadosLinha->getDataVencimento());]]></search>
       <add position="replace">
         <![CDATA[/* Plugin ArquivoOBNGRU - Parte4 */
-    list($iAnoCodigoBarra, $iMesCodigoBarra, $iDiaCodigoBarra) = explode("-", $oDadosDetalheTransmissao->e74_datavencimento);]]>
+    list($iAnoCodigoBarra, $iMesCodigoBarra, $iDiaCodigoBarra) = explode("-", $oDadosDetalheTransmissao->e74_datavencimento);
+    $sCPFCNPJ = $oDadosLinha->getCnpj();
+    if ($iTipoFavorecido == ConfiguracaoArquivoObn::TIPO_CPF) {
+      $sCPFCNPJ = str_pad($sCPFCNPJ, 14, " ", STR_PAD_RIGHT);
+    }]]>
       </add>
     </operation>
 
@@ -442,6 +446,13 @@ exit;]]>
       <add position="replace">
         <![CDATA[/* Plugin ArquivoOBNGRU - Parte11 */
     $oStdLinhaTipoQuatro->valor_liquido                    = str_pad(str_replace(".", "", $oDadosDetalheTransmissao->e74_valornominal), 17, "0", STR_PAD_LEFT);]]>
+      </add>
+    </operation>
+
+    <operation>
+      <search regex="true"><![CDATA[(\$oStd.*Quatro.*campo_branco_cinco.*;)]]></search>
+      <add>
+        <![CDATA[$oStdLinhaTipoQuatro->campo_branco_cinco               = "{$iTipoFavorecido}"."{$sCPFCNPJ}".str_repeat(" ", 149);]]>
       </add>
     </operation>
 

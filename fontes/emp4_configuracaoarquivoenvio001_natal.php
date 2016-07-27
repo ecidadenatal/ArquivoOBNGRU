@@ -757,8 +757,11 @@ function js_salvarDetalhes(iMovimento){
      * Movimento do tipo OBN
      *  - valida valor total lancado, deve ser igual ao do movimento
      */
-    if (iTipoTransmissao == 2 || iTipoTransmissao == 3 && nTotalLancamentos > 0 && nTotalLancamentos != nTotalMovimentos) {
-      return alert('Valor total dos lançamentos deve ser igual ao do movimento: ' + js_formatar(nTotalMovimentos, 'f'));
+
+    if ((iTipoTransmissao == 2 || iTipoTransmissao == 3) && nTotalLancamentos > 0 && parseFloat(nTotalLancamentos.replace(",", ".")) != parseFloat(nTotalMovimentos.replace(",", "."))) {
+      if ($F('iFatura') == "f") {
+        return alert('Valor total dos lançamentos deve ser igual ao do movimento: ' + js_formatar(nTotalMovimentos, 'f'));
+      }
     }
 
     //js_divCarregando(msgDiv,'msgBox');
