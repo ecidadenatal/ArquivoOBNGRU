@@ -29,7 +29,7 @@ exit;]]>
           $oRegistro->numero_autenticacao  = $oArquivo->numeroautenticacao;
           $oRegistro->retorno_banco        = $oArquivo->codigoretornooperacao;
           $oRegistro->codigo_retorno       = $this->getCodigoErro( $oArquivo->codigoretornooperacao );
-          $oRegistro->valor_efetivado  = $oArquivo->valornominal;
+          $oRegistro->valor_efetivado  = $oArquivo->valorliqui;
           $oRegistro->data_efetivacao  = "null";
 
           $oDadosRetorno->registros[] = $oRegistro;
