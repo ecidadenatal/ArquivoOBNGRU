@@ -23,10 +23,14 @@ exit;]]>
           $oRegistro = new stdClass();
           
           $oRegistro->codigo_movimento = trim((int) $oArquivo->codob);
+          $oRegistro->numero_lote      = "00";
+          $oRegistro->mov_lote         = "0000"; 
           $oRegistro->codigo_barras        = $oArquivo->codigobarra;
           $oRegistro->numero_autenticacao  = $oArquivo->numeroautenticacao;
           $oRegistro->retorno_banco        = $oArquivo->codigoretornooperacao;
           $oRegistro->codigo_retorno       = $this->getCodigoErro( $oArquivo->codigoretornooperacao );
+          $oRegistro->valor_efetivado  = $oArquivo->valornominal;
+          $oRegistro->data_efetivacao  = "null";
 
           $oDadosRetorno->registros[] = $oRegistro;
         
@@ -37,9 +41,13 @@ exit;]]>
           $oRegistro = new stdClass();
 
           $oRegistro->codigo_movimento = trim((int) $oArquivo->codigo_ob);
+          $oRegistro->numero_lote      = "00";
+          $oRegistro->mov_lote         = "0000"; 
           $oRegistro->codigo_receita       = $oArquivo->cod_rec_tributo;
           $oRegistro->numero_autenticacao  = $oArquivo->numero_autenticacao;
           $oRegistro->retorno_banco        = $oArquivo->retorno_operacao;
+          $oRegistro->valor_efetivado  = 0;
+          $oRegistro->data_efetivacao  = "null";
           $oRegistro->codigo_retorno       = $this->getCodigoErro($oArquivo->retorno_operacao);
 
           $oDadosRetorno->registros[] = $oRegistro;
@@ -132,11 +140,21 @@ exit;]]>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 4 */]]></search>
       <add position="after">
         <![CDATA[
+      $sWhereMovRet = "exists(select 1 from empagedadosretmov where e76_codmov = {$iCodigoMovimento} and e76_processado = 't')";
+
+      $oDaoEmpAgeMovDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
+      $rsDetalheTransmissao    = $oDaoEmpAgeMovDetalheTransmissao->sql_record($oDaoEmpAgeMovDetalheTransmissao->sql_query_file(null, "count(*) as iDetalheTransmissao", null, "e74_empagemov = {$iCodigoMovimento} and {$sWhereMovRet}"));
+      $quantDetalheTransmissao = db_utils::fieldsMemory($rsDetalheTransmissao, 0)->iDetalheTransmissao;
+      $oDaoEmpAgeMovPagamento  = db_utils::getDao('empagemovpagamento');
+      $rsEmpAgeMovPagamento    = $oDaoEmpAgeMovPagamento->sql_record($oDaoEmpAgeMovPagamento->sql_query_empagemov("count(*) as iPagamento", "", "empagemov = {$iCodigoMovimento} and {$sWhereMovRet}"));
+      $quantEmpAgeMovPagamento = db_utils::fieldsMemory($rsEmpAgeMovPagamento, 0)->iPagamento;
+
+      $iTotalGRU = $quantDetalheTransmissao + $quantEmpAgeMovPagamento;
       /*
        * Verifica se o movimento possui cód. de barras (linha tipo 4) ou cód. de receita (linha tipo 5)
        * Se tiver, não cria retorno, pois a linha tipo 2 que o precede já tem um retorno 
        */
-      if (isset($oMovimentoRetorno->codigo_barras) || isset($oMovimentoRetorno->codigo_receita)) {
+      if ((isset($oMovimentoRetorno->codigo_barras) || isset($oMovimentoRetorno->codigo_receita)) && $iTotalGRU > 0) {
         continue;
       }]]>
       </add>
