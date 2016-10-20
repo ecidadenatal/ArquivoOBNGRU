@@ -813,6 +813,17 @@ function js_incluirDetalhe(iMovimento){
   var nPercentualReceita    = $F('txtPercentualReceita');
   var nJurosEncargos        = $F('txtJurosEncargos');
 
+  if(iCodigoBarra.length > 0) {
+
+    if(iCodigoBarra.substr(0,1) == '8') {
+      $('iTipoFatura').value = 2;
+      iFatura = '2';
+    } else {
+      $('iTipoFatura').value = 1;
+      iFatura = '1';
+    }
+  }
+
   if (iFatura == '2') {
     sFatura = "Convênio";
   } else if (iFatura == '3') {

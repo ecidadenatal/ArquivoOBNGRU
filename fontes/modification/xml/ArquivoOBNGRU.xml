@@ -140,16 +140,8 @@ exit;]]>
       <search><![CDATA[/* Plugin ArquivoOBNGRU - Parte 4 */]]></search>
       <add position="after">
         <![CDATA[
-      $sWhereMovRet = "exists(select 1 from empagedadosretmov where e76_codmov = {$iCodigoMovimento} and e76_processado = 't')";
-
-      $oDaoEmpAgeMovDetalheTransmissao = db_utils::getDao('empagemovdetalhetransmissao');
-      $rsDetalheTransmissao    = $oDaoEmpAgeMovDetalheTransmissao->sql_record($oDaoEmpAgeMovDetalheTransmissao->sql_query_file(null, "count(*) as iDetalheTransmissao", null, "e74_empagemov = {$iCodigoMovimento} and {$sWhereMovRet}"));
-      $quantDetalheTransmissao = db_utils::fieldsMemory($rsDetalheTransmissao, 0)->iDetalheTransmissao;
-      $oDaoEmpAgeMovPagamento  = db_utils::getDao('empagemovpagamento');
-      $rsEmpAgeMovPagamento    = $oDaoEmpAgeMovPagamento->sql_record($oDaoEmpAgeMovPagamento->sql_query_empagemov("count(*) as iPagamento", "", "empagemov = {$iCodigoMovimento} and {$sWhereMovRet}"));
-      $quantEmpAgeMovPagamento = db_utils::fieldsMemory($rsEmpAgeMovPagamento, 0)->iPagamento;
-
-      $iTotalGRU = $quantDetalheTransmissao + $quantEmpAgeMovPagamento;
+      $rsQuantProc = db_query("select count(*) as quantProc from empagedadosretmov where e76_codmov = {$iCodigoMovimento} and e76_processado = 't'");
+      $iTotalGRU = db_utils::fieldsMemory($rsQuantProc, 0)->quantproc;   
       /*
        * Verifica se o movimento possui cód. de barras (linha tipo 4) ou cód. de receita (linha tipo 5)
        * Se tiver, não cria retorno, pois a linha tipo 2 que o precede já tem um retorno 
